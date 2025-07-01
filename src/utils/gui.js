@@ -11,12 +11,9 @@ import {
 } from "../core/media"
 import { record, toggleVideoRecord } from "../core/record"
 
-var gui
-var guiOpenToggle = false
-
 const initGUI = () => {
-  gui = new dat.gui.GUI({ autoPlace: false })
-  gui.close()
+  const gui = new dat.gui.GUI({ autoPlace: false })
+  // gui.close()
 
   obj["selectVideo"] = function () {
     types.video = "Select Video"
@@ -99,10 +96,6 @@ const initGUI = () => {
   let customContainer = document.getElementById("gui")
   customContainer.appendChild(gui.domElement)
 
-  var guiCloseButton = document.getElementsByClassName("close-button")
-  console.log(guiCloseButton.length)
-  guiCloseButton[0].addEventListener("click", updateGUIState)
-
   var useWebcamButton = document.getElementById("useWebcamButton")
   useWebcamButton.addEventListener("click", function () {
     types.video = "Webcam"
@@ -115,14 +108,6 @@ function selectVideo() {
   fileInput.click()
 }
 
-function updateGUIState() {
-  if (guiOpenToggle) {
-    guiOpenToggle = false
-  } else {
-    guiOpenToggle = true
-  }
-}
-
 function saveImage() {
   const link = document.createElement("a")
   link.href = canvas.toDataURL()
@@ -131,16 +116,6 @@ function saveImage() {
   const filename = `ASCII_${date.toLocaleDateString()}_${date.toLocaleTimeString()}.png`
   link.download = filename
   link.click()
-}
-
-function toggleGUI() {
-  if (guiOpenToggle == false) {
-    gui.open()
-    guiOpenToggle = true
-  } else {
-    gui.close()
-    guiOpenToggle = false
-  }
 }
 
 export { initGUI }

@@ -156,32 +156,6 @@ fileInput.addEventListener("change", (e) => {
   }, 2000)
 })
 
-/*
-  //shortcut hotkey presses
-  document.addEventListener('keydown', function(event) {
-    
-      if(event.shiftKey && event.key == 'p'){
-          togglePausePlay();
-      } else if (event.key === 'i' && event.shiftKey) {
-          saveImage();
-      } else if (event.key === 'v' && event.shiftKey) {
-          toggleVideoRecord();
-      } else if (event.key === 'o' && event.shiftKey) {
-          dat.GUI.toggleHide();
-      } 
-     
-  });
-  
-  //shortcut hotkey presses
-  document.addEventListener('keydown', function(event) {
-    
-      if(event.key === 'h') {
-          toggleGUI();
-      } 
-     
-  });
-  */
-
 export {
   togglePausePlay,
   changeVideoType,
