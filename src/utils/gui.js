@@ -1,6 +1,6 @@
 import dat from "dat.gui"
 
-import { obj } from "../core/variables"
+import { obj } from "../const/variables"
 import { refresh } from "../core/render"
 import {
   togglePausePlay,

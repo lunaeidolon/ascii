@@ -1,4 +1,4 @@
-import { obj, webcam, dVideo, cvs, types } from "./core/variables"
+import { obj, webcam, dVideo, cvs, types } from "./const/variables"
 import {
   webcamVideo,
   userVideo,
@@ -9,7 +9,7 @@ import {
   ctx2,
   canvasPixel,
   ctx3,
-} from "./core/dom"
+} from "./const/dom"
 
 import { render, renderText, refresh, loop } from "./core/render"
 

@@ -1,4 +1,4 @@
-import { obj, webcam, dVideo, cvs, types, anime } from "./variables"
+import { obj, webcam, dVideo, cvs, types, anime } from "../const/variables"
 import { loop, refresh } from "./render"
 
 function togglePausePlay() {
