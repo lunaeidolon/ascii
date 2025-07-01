@@ -15,15 +15,9 @@ import { render, renderText, refresh, loop } from "./core/render"
 
 import { ua, isSafari, isFirefox, isIOS, isAndroid } from "./utils/broswer"
 
-import { Muxer, ArrayBufferTarget } from "mp4-muxer"
+import { initGUI } from "./utils/gui"
 
-import {
-  togglePausePlay,
-  changeVideoType,
-  startDefaultVideo,
-  startWebcam,
-  stopVideo,
-} from "./core/media"
+import { startDefaultVideo } from "./core/media"
 
 /*
 To do:
@@ -39,5 +33,6 @@ canvas.width = cvs.width
 canvas.height = cvs.height
 
 //MAIN METHOD
+initGUI()
 refresh()
 startDefaultVideo()

@@ -23,7 +23,7 @@ import {
   rgbToHex,
 } from "../utils/color"
 
-import { record } from "./record"
+import { record, renderCanvasToVideoFrameAndEncode } from "./record"
 
 var pixelSize
 var numCols
@@ -357,11 +357,11 @@ function loop() {
     if (record.state == true) {
       renderCanvasToVideoFrameAndEncode({
         canvas,
-        videoEncoder,
-        frameNumber,
-        videofps,
+        videoEncoder: record.videoEncoder,
+        frameNumber: record.frameNumber,
+        videofps: record.videofps,
       })
-      frameNumber++
+      record.frameNumber++
     }
 
     anime.animationRequest = requestAnimationFrame(loop)

@@ -1,5 +1,5 @@
 import { obj, webcam, dVideo, cvs, types, anime } from "./variables"
-import { loop } from "./render"
+import { loop, refresh } from "./render"
 
 function togglePausePlay() {
   if (anime.playAnimationToggle == false) {
