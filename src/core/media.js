@@ -1,5 +1,6 @@
 import { obj, webcam, dVideo, cvs, types, anime } from "../const/variables"
 import { loop, refresh } from "./render"
+import { ua, isSafari, isFirefox, isIOS, isAndroid } from "../utils/broswer"
 
 function togglePausePlay() {
   if (anime.playAnimationToggle == false) {

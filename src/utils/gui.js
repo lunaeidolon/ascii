@@ -1,6 +1,6 @@
 import dat from "dat.gui"
 
-import { obj } from "../const/variables"
+import { obj, types } from "../const/variables"
 import { refresh } from "../core/render"
 import {
   togglePausePlay,
@@ -19,13 +19,13 @@ const initGUI = () => {
   gui.close()
 
   obj["selectVideo"] = function () {
-    videoType = "Select Video"
+    types.video = "Select Video"
     fileInput.click()
   }
   gui.add(obj, "selectVideo").name("Upload Video")
 
   obj["useWebcam"] = function () {
-    videoType = "Webcam"
+    types.video = "Webcam"
     changeVideoType()
   }
   gui.add(obj, "useWebcam").name("Use Webcam")
@@ -105,7 +105,7 @@ const initGUI = () => {
 
   var useWebcamButton = document.getElementById("useWebcamButton")
   useWebcamButton.addEventListener("click", function () {
-    videoType = "Webcam"
+    types.video = "Webcam"
     changeVideoType()
   })
 }
