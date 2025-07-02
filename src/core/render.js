@@ -136,6 +136,7 @@ const render = (context) => {
         var grayScaleValue =
           0.299 * avgColor[0] + 0.587 * avgColor[1] + 0.114 * avgColor[2] //perceived luminosity value
         grayscaleDataArray[cellY][cellX] = [grayScaleValue, avgColor]
+        console.log([grayScaleValue, avgColor])
       }
     }
   } else {
@@ -312,6 +313,7 @@ const refresh = () => {
     .setAttribute("style", "width: " + cvs.width + "px;")
   //effectWidthInput.style.width = cvs.width;
   effectWidth = Number(effectWidthInput.value) / 100
+  if (effectWidth > 0.99) effectWidth = 0.99
   effectWidthLabel.innerHTML =
     "Effect Width: " + Math.round(effectWidth * 100) + "%"
 
