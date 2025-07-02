@@ -1,6 +1,9 @@
-import { obj, webcam, dVideo, cvs, types, anime } from "../const/variables"
+import { ctx, dpr } from "../const/dom"
+import { webcam, dVideo, cvs, types, anime } from "../const/variables"
 import { loop, refresh } from "./render"
-import { ua, isSafari, isFirefox, isIOS, isAndroid } from "../utils/broswer"
+import { isIOS, isAndroid } from "../utils/broswer"
+
+// canvas dpr
 
 function togglePausePlay() {
   if (anime.playAnimationToggle == false) {
@@ -43,8 +46,13 @@ function startDefaultVideo() {
 
   cvs.width = dVideo.width
   cvs.height = dVideo.height
-  canvas.width = cvs.width
-  canvas.height = cvs.height
+  canvas.width = cvs.width * dpr
+  canvas.height = cvs.height * dpr
+
+  canvas.style.width = cvs.width + "px"
+  canvas.style.height = cvs.height + "px"
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
 
   defaultVideo.play()
   anime.playAnimationToggle = true
@@ -88,8 +96,13 @@ function startWebcam() {
 
       cvs.width = webcam.width
       cvs.height = webcam.height
-      canvas.width = cvs.width
-      canvas.height = cvs.height
+      canvas.width = cvs.width * dpr
+      canvas.height = cvs.height * dpr
+
+      canvas.style.width = cvs.width + "px"
+      canvas.style.height = cvs.height + "px"
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
 
       refresh()
 
@@ -144,8 +157,13 @@ fileInput.addEventListener("change", (e) => {
       cvs.width * (userVideo.videoHeight / userVideo.videoWidth),
     )
 
-    canvas.width = cvs.width
-    canvas.height = cvs.height
+    canvas.width = cvs.width * dpr
+    canvas.height = cvs.height * dpr
+
+    canvas.style.width = cvs.width + "px"
+    canvas.style.height = cvs.height + "px"
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
   })
 
   setTimeout(function () {

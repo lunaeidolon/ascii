@@ -3,11 +3,16 @@ export const webcamVideo = document.getElementById("webcamVideo")
 export const userVideo = document.getElementById("userVideo")
 export const defaultVideo = document.getElementById("defaultVideo")
 
-//Final animation canvas
-export const canvas = document.getElementById("canvas")
-export const ctx = canvas.getContext("2d", {
+const dpr = window.devicePixelRatio || 1
+
+const canvas = document.getElementById("canvas")
+const ctx = canvas.getContext("2d", {
   willReadFrequently: true,
 })
+ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+//Final animation canvas
+export { dpr, canvas, ctx }
 
 //Canvas for raw still images from video
 export const canvasRaw = document.getElementById("canvas-video")

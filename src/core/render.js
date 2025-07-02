@@ -1,26 +1,21 @@
-import { obj, webcam, dVideo, cvs, types, anime } from "../const/variables"
+import { obj, cvs, types, anime } from "../const/variables"
 import {
   webcamVideo,
   userVideo,
   defaultVideo,
   canvas,
   ctx,
+  dpr,
   canvasRaw,
-  ctx2,
   canvasPixel,
-  ctx3,
 } from "../const/dom"
 
 import {
   getAverageColor,
   getHueFromHex,
   hexToRgb,
-  rgbToHue,
-  rgbToSaturation,
-  rgbToLightness,
   interpolateHex,
   tweakHexColor,
-  rgbToHex,
 } from "../utils/color"
 
 import { record, renderCanvasToVideoFrameAndEncode } from "./record"
@@ -34,9 +29,6 @@ var fontFamily = "Courier New"
 var fontSize
 //this defines the character set. ordered by darker to lighter colour
 const gradient = "____``..--^^~~<>??123456789%%&&@@"
-//const gradient = "_______.:!/r(l1Z4H9W8$@";
-//const gradient =  "`.-':_,^=;><+!rc*/z?sLTv)J7(|Fi{C}fI31tlu[neoZ5Yxjya]2ESwqkP6h9d4VpOGbUAKXHm8RD#$Bg0MNWQ%&@"
-//const gradient =  "`.-':_,^=;<+!rc*/z?sTv7(|Fi{C}fI31tu[neoZ5xjya]2EwqkP6h94VpOGbUKXHm8R#$Bg0NW%&@"
 const preparedGradient = gradient.replaceAll("_", "\u00A0")
 
 var effectWidthInput = document.getElementById("effectWidthInput")
@@ -77,21 +69,21 @@ const getCharByScale = (scale) => {
   return preparedGradient[val]
 }
 
-const render = (ctx2) => {
+const render = (context) => {
   if (cvs.width && cvs.height) {
     canvasRaw.width = cvs.width
     canvasRaw.height = cvs.height
 
     //choose video feed
     if (types.video == "Webcam") {
-      ctx2.drawImage(webcamVideo, 0, 0, cvs.width, cvs.height)
+      context.drawImage(webcamVideo, 0, 0, cvs.width / dpr, cvs.height / dpr)
     } else if (types.video == "Select Video") {
-      ctx2.drawImage(userVideo, 0, 0, cvs.width, cvs.height)
+      context.drawImage(userVideo, 0, 0, cvs.width / dpr, cvs.height / dpr)
     } else if (types.video == "Default") {
-      ctx2.drawImage(defaultVideo, 0, 0, cvs.width, cvs.height)
+      context.drawImage(defaultVideo, 0, 0, cvs.width / dpr, cvs.height / dpr)
     }
 
-    var pixelData = ctx2.getImageData(0, 0, cvs.width, cvs.height)
+    var pixelData = context.getImageData(0, 0, cvs.width, cvs.height)
     var pixels = pixelData.data
 
     //new canvas with a pixelated image
@@ -124,22 +116,14 @@ const render = (ctx2) => {
         }
 
         var avgColor = getAverageColor(cellPixels)
-        //ctx3.fillStyle = `rgba(${avgColor[0]}, ${avgColor[1]}, ${avgColor[2]}, ${alpha})`;
-        //ctx3.fillRect(cellX*pixelSize, cellY*pixelSize, pixelSize, pixelSize);
-
-        //videoPixels.push(avgColor[0]);
-        //videoPixels.push(avgColor[1]);
-        //videoPixels.push(avgColor[2]);
-        //videoPixels.push(alpha);
-
         var grayScaleValue =
           0.299 * avgColor[0] + 0.587 * avgColor[1] + 0.114 * avgColor[2] //perceived luminosity value
         grayscaleDataArray[cellY][cellX] = grayScaleValue
       }
     }
   } else {
-    ctx2.fillStyle = "#fff"
-    ctx2.fillRect(0, 0, cvs.width, cvs.height)
+    context.fillStyle = "#fff"
+    context.fillRect(0, 0, cvs.width, cvs.height)
   }
 }
 

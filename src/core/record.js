@@ -1,5 +1,5 @@
 import { Muxer, ArrayBufferTarget } from "mp4-muxer"
-import { ua, isSafari, isFirefox, isIOS, isAndroid } from "../utils/broswer"
+import { isFirefox, isIOS, isAndroid } from "../utils/broswer"
 
 var mediaRecorder
 var recordedChunks
