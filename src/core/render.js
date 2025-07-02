@@ -1,3 +1,6 @@
+// import ndarray from "ndarray"
+import { imagePaths, imageCache } from "./bitmap"
+
 import { obj, cvs, types, anime } from "../const/variables"
 import {
   webcamVideo,
@@ -21,6 +24,9 @@ import {
 import { record, renderCanvasToVideoFrameAndEncode } from "./record"
 
 var pixelSize
+var pixelRaito = 2
+var pixelW
+var pixelH
 var numCols
 var numRows
 var alpha = 1
@@ -44,7 +50,6 @@ var webcamStream
 
 //turn video input into still images, and then into pixelated grayscale values
 
-var videoPixels = []
 var grayscaleDataArray = []
 
 var backgroundColor = obj.backgroundColor
@@ -69,6 +74,12 @@ const getCharByScale = (scale) => {
   return preparedGradient[val]
 }
 
+// bitmap
+const getBitmapByScale = (scale) => {
+  const val = Math.floor((scale / 255) * (imageCache.length - 1))
+  return imageCache[val]
+}
+
 const render = (context) => {
   if (cvs.width && cvs.height) {
     canvasRaw.width = cvs.width
@@ -86,10 +97,16 @@ const render = (context) => {
     var pixelData = context.getImageData(0, 0, cvs.width, cvs.height)
     var pixels = pixelData.data
 
+    // const test = ndarray(
+    //   new Uint8Array(pixels),
+    //   [cvs.width, cvs.height, 4],
+    //   [4, 4 * cvs.width, 1],
+    //   0,
+    // )
+
     //new canvas with a pixelated image
     canvasPixel.width = cvs.width
     canvasPixel.height = cvs.height
-    videoPixels = []
     grayscaleDataArray = []
 
     for (var cellY = 0; cellY < numRows; cellY++) {
@@ -98,10 +115,10 @@ const render = (context) => {
       for (var cellX = 0; cellX < numCols; cellX++) {
         var cellPixels = []
 
-        for (var pixelY = 0; pixelY < pixelSize; pixelY++) {
-          for (var pixelX = 0; pixelX < pixelSize; pixelX++) {
-            var currentXPosition = cellX * pixelSize + pixelX
-            var currentYPosition = cellY * pixelSize + pixelY
+        for (var pixelY = 0; pixelY < pixelH; pixelY++) {
+          for (var pixelX = 0; pixelX < pixelW; pixelX++) {
+            var currentXPosition = cellX * pixelW + pixelX
+            var currentYPosition = cellY * pixelH + pixelY
 
             var currentPixelDataValue =
               (currentYPosition * cvs.width + currentXPosition) * 4
@@ -118,7 +135,7 @@ const render = (context) => {
         var avgColor = getAverageColor(cellPixels)
         var grayScaleValue =
           0.299 * avgColor[0] + 0.587 * avgColor[1] + 0.114 * avgColor[2] //perceived luminosity value
-        grayscaleDataArray[cellY][cellX] = grayScaleValue
+        grayscaleDataArray[cellY][cellX] = [grayScaleValue, avgColor]
       }
     }
   } else {
@@ -136,7 +153,7 @@ const renderText = () => {
     for (var row = 0; row < numRows; row++) {
       var adjustedThreshold =
         threshold + 0.2 * Math.sin(counter / 30) * randomness
-      var currentGrayValue = grayscaleDataArray[row][col]
+      var currentGrayValue = grayscaleDataArray[row][col][0]
 
       var char
       var currentFontSize = Math.min(
@@ -147,7 +164,7 @@ const renderText = () => {
       //draw background color of pixels
       if (counter % 8 == 0 && Math.random() < randomness * 0.002) {
         ctx.fillStyle = tweakHexColor(backgroundColor, 100 * randomness)
-        ctx.fillRect(col * pixelSize, row * pixelSize, pixelSize, pixelSize)
+        ctx.fillRect(col * pixelW, row * pixelH, pixelW, pixelH)
       } else if (backgroundGradient) {
         var currentBackgroundColor =
           "hsl(" +
@@ -194,7 +211,7 @@ const renderText = () => {
           }
         }
 
-        ctx.fillRect(col * pixelSize, row * pixelSize, pixelSize, pixelSize)
+        ctx.fillRect(col * pixelW, row * pixelH, pixelW, pixelH)
       } else {
       }
 
@@ -247,9 +264,7 @@ const renderText = () => {
             (currentGrayValue / 255 - adjustedThreshold) /
               (1 - adjustedThreshold),
           )
-          ctx.fillText(char, col * pixelSize, row * pixelSize + pixelSize)
-          //ctx.strokeStyle = fontColor;
-          //ctx.strokeText(char, col*pixelSize + pixelSize/4, row*(pixelSize) + pixelSize/2);
+          ctx.fillText(char, col * pixelW, row * pixelH + pixelH)
         }
       } else {
         if (currentGrayValue / 255 < 1 - adjustedThreshold) {
@@ -258,9 +273,32 @@ const renderText = () => {
             fontColor,
             currentGrayValue / 255 / (1 - adjustedThreshold),
           )
-          ctx.fillText(char, col * pixelSize, row * pixelSize + pixelSize)
+          ctx.fillText(char, col * pixelW, row * pixelH + pixelH)
         }
       }
+    }
+  }
+}
+
+const renderSVG = () => {
+  ctx.fillStyle = backgroundColor
+  // ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+  // console.log(imageCache)
+
+  for (var col = 0; col < numCols; col++) {
+    for (var row = 0; row < numRows; row++) {
+      var adjustedThreshold =
+        threshold + 0.2 * Math.sin(counter / 30) * randomness
+      var currentGrayValue = grayscaleDataArray[row][col][0]
+      var bitmap = getBitmapByScale(currentGrayValue)
+
+      ctx.drawImage(
+        bitmap.offscreenCanvas,
+        col * pixelW,
+        row * pixelH,
+        pixelW,
+        pixelH,
+      )
     }
   }
 }
@@ -281,8 +319,10 @@ const refresh = () => {
   fontSizeFactor = obj.fontSizeFactor
   pixelSizeFactor = obj.pixelSizeFactor
   pixelSize = Math.ceil(Math.min(cvs.width, cvs.height) / pixelSizeFactor)
-  numCols = Math.ceil(Math.ceil(cvs.width / pixelSize) * effectWidth)
-  numRows = Math.ceil(cvs.height / pixelSize)
+  pixelW = pixelSize
+  pixelH = pixelSize * pixelRaito
+  numCols = Math.ceil(Math.ceil(cvs.width / pixelW) * effectWidth)
+  numRows = Math.ceil(cvs.height / pixelH)
   fontSize = pixelSize / 0.65
   ctx.font = fontSize + "px " + fontFamily
 
@@ -336,7 +376,8 @@ function loop() {
       }
     }
 
-    renderText()
+    // renderText()
+    renderSVG()
 
     if (record.state == true) {
       renderCanvasToVideoFrameAndEncode({
