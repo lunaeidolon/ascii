@@ -1,5 +1,6 @@
 // import ndarray from "ndarray"
 import { imagePaths, imageCache } from "./bitmap"
+import { quadTreeFlat } from "../utils/quadtree"
 
 import { obj, cvs, types, anime } from "../const/variables"
 import {
@@ -136,7 +137,6 @@ const render = (context) => {
         var grayScaleValue =
           0.299 * avgColor[0] + 0.587 * avgColor[1] + 0.114 * avgColor[2] //perceived luminosity value
         grayscaleDataArray[cellY][cellX] = [grayScaleValue, avgColor]
-        console.log([grayScaleValue, avgColor])
       }
     }
   } else {
@@ -230,9 +230,9 @@ const renderText = () => {
       } else if (Math.random() < 0.005 * randomness) {
         char =
           preparedGradient[Math.floor(Math.random() * preparedGradient.length)] //draw random char
-      } else if (types.animation == "Random Text") {
+      } else if (obj.animationType == "Random Text") {
         char = getCharByScale(currentGrayValue)
-      } else if (types.animation == "User Text") {
+      } else if (obj.animationType == "User Text") {
         char = textInput[(row * numCols + col) % textInput.length]
         if (invertToggle) {
           currentFontSize = Math.min(
@@ -283,8 +283,7 @@ const renderText = () => {
 
 const renderSVG = () => {
   ctx.fillStyle = backgroundColor
-  // ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
-  // console.log(imageCache)
+  ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
 
   for (var col = 0; col < numCols; col++) {
     for (var row = 0; row < numRows; row++) {
@@ -299,6 +298,30 @@ const renderSVG = () => {
         row * pixelH,
         pixelW,
         pixelH,
+      )
+    }
+  }
+}
+
+const renderTree = () => {
+  ctx.fillStyle = backgroundColor
+  ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+
+  const arr = quadTreeFlat(grayscaleDataArray)
+
+  console.log(arr)
+
+  for (let i = 0; i < arr.length; i++) {
+    const blk = arr[i]
+    var bitmap = getBitmapByScale(blk.value)
+
+    if (bitmap) {
+      ctx.drawImage(
+        bitmap.offscreenCanvas,
+        blk.x * pixelW,
+        blk.y * pixelH,
+        blk.w * pixelW,
+        blk.h * pixelH,
       )
     }
   }
@@ -379,7 +402,8 @@ function loop() {
     }
 
     // renderText()
-    renderSVG()
+    // renderSVG()
+    renderTree()
 
     if (record.state == true) {
       renderCanvasToVideoFrameAndEncode({
