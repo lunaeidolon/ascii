@@ -53,22 +53,14 @@ var webcamStream
 
 var grayscaleDataArray = []
 
-var backgroundColor = obj.backgroundColor
-var backgroundRGB = hexToRgb(backgroundColor)
-var backgroundHue = getHueFromHex(backgroundColor)
-var backgroundSaturation = obj.backgroundSaturation
+var backgroundRGB = hexToRgb(obj.backgroundColor)
+var backgroundHue = getHueFromHex(obj.backgroundColor)
 
 var backgroundGradient = obj.backgroundGradient
-var fontSizeFactor = obj.fontSizeFactor
-var pixelSizeFactor = obj.pixelSizeFactor
-var fontColor = obj.fontColor
-var fontHue = getHueFromHex(fontColor)
-var fontColor2 = obj.fontColor2
+var fontHue = getHueFromHex(obj.fontColor)
 
 var threshold = obj.threshold / 100
-var textInput = obj.textInput
 var randomness = obj.randomness / 100
-var invertToggle = obj.invert
 
 const getCharByScale = (scale) => {
   const val = Math.floor((scale / 255) * (gradient.length - 1))
@@ -147,7 +139,7 @@ const render = (context) => {
 
 //draw the text and background color for each frame onto the final canvas
 const renderText = () => {
-  ctx.fillStyle = backgroundColor
+  ctx.fillStyle = obj.backgroundColor
   ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
 
   for (var col = 0; col < numCols; col++) {
@@ -159,19 +151,19 @@ const renderText = () => {
       var char
       var currentFontSize = Math.min(
         fontSize * 3,
-        (fontSize * fontSizeFactor) / 3,
+        (fontSize * obj.fontSizeFactor) / 3,
       )
 
       //draw background color of pixels
       if (counter % 8 == 0 && Math.random() < randomness * 0.002) {
-        ctx.fillStyle = tweakHexColor(backgroundColor, 100 * randomness)
+        ctx.fillStyle = tweakHexColor(obj.backgroundColor, 100 * randomness)
         ctx.fillRect(col * pixelW, row * pixelH, pixelW, pixelH)
       } else if (backgroundGradient) {
         var currentBackgroundColor =
           "hsl(" +
           backgroundHue +
           "," +
-          backgroundSaturation +
+          obj.backgroundSaturation +
           "%," +
           Math.pow(currentGrayValue / 255, 2) * 100 +
           "%)"
@@ -179,12 +171,12 @@ const renderText = () => {
           "hsl(" +
           backgroundHue +
           "," +
-          backgroundSaturation +
+          obj.backgroundSaturation +
           "%," +
           (1 - Math.pow(currentGrayValue / 255, 2)) * 100 +
           "%)"
 
-        if (invertToggle == false) {
+        if (obj.invertToggle == false) {
           if (currentGrayValue / 255 > adjustedThreshold) {
             ctx.fillStyle = currentBackgroundColor
           } else {
@@ -192,7 +184,7 @@ const renderText = () => {
               "hsl(" +
               backgroundHue +
               "," +
-              backgroundSaturation +
+              obj.backgroundSaturation +
               "%," +
               (adjustedThreshold / 4) * 100 +
               "%)"
@@ -205,7 +197,7 @@ const renderText = () => {
               "hsl(" +
               backgroundHue +
               "," +
-              backgroundSaturation +
+              obj.backgroundSaturation +
               "%," +
               (adjustedThreshold / 4) * 100 +
               "%)"
@@ -233,12 +225,13 @@ const renderText = () => {
       } else if (obj.animationType == "Random Text") {
         char = getCharByScale(currentGrayValue)
       } else if (obj.animationType == "User Text") {
-        char = textInput[(row * numCols + col) % textInput.length]
-        if (invertToggle) {
+        char = obj.textInput[(row * numCols + col) % obj.textInput.length]
+        if (obj.invertToggle) {
           currentFontSize = Math.min(
             fontSize * 3,
             Math.floor(
-              (((1 - Math.pow(currentGrayValue / 255, 1)) * fontSizeFactor) /
+              (((1 - Math.pow(currentGrayValue / 255, 1)) *
+                obj.fontSizeFactor) /
                 3) *
                 fontSize,
             ),
@@ -247,7 +240,7 @@ const renderText = () => {
           currentFontSize = Math.min(
             fontSize * 3,
             Math.floor(
-              ((Math.pow(currentGrayValue / 255, 1) * fontSizeFactor) / 3) *
+              ((Math.pow(currentGrayValue / 255, 1) * obj.fontSizeFactor) / 3) *
                 fontSize,
             ),
           )
@@ -257,11 +250,11 @@ const renderText = () => {
       //draw text onto canvas
       ctx.font = currentFontSize + "px " + fontFamily
 
-      if (invertToggle == false) {
+      if (obj.invertToggle == false) {
         if (currentGrayValue / 255 > adjustedThreshold) {
           ctx.fillStyle = interpolateHex(
-            fontColor,
-            fontColor2,
+            obj.fontColor,
+            obj.fontColor2,
             (currentGrayValue / 255 - adjustedThreshold) /
               (1 - adjustedThreshold),
           )
@@ -270,8 +263,8 @@ const renderText = () => {
       } else {
         if (currentGrayValue / 255 < 1 - adjustedThreshold) {
           ctx.fillStyle = interpolateHex(
-            fontColor2,
-            fontColor,
+            obj.fontColor2,
+            obj.fontColor,
             currentGrayValue / 255 / (1 - adjustedThreshold),
           )
           ctx.fillText(char, col * pixelW, row * pixelH + pixelH)
@@ -282,7 +275,7 @@ const renderText = () => {
 }
 
 const renderSVG = () => {
-  ctx.fillStyle = backgroundColor
+  ctx.fillStyle = obj.backgroundColor
   ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
 
   for (var col = 0; col < numCols; col++) {
@@ -304,12 +297,10 @@ const renderSVG = () => {
 }
 
 const renderTree = () => {
-  ctx.fillStyle = backgroundColor
+  ctx.fillStyle = obj.backgroundColor
   ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
 
   const arr = quadTreeFlat(grayscaleDataArray)
-
-  console.log(arr)
 
   for (let i = 0; i < arr.length; i++) {
     const blk = arr[i]
@@ -340,10 +331,7 @@ const refresh = () => {
   effectWidthLabel.innerHTML =
     "Effect Width: " + Math.round(effectWidth * 100) + "%"
 
-  types.animation = obj.animationType
-  fontSizeFactor = obj.fontSizeFactor
-  pixelSizeFactor = obj.pixelSizeFactor
-  pixelSize = Math.ceil(Math.min(cvs.width, cvs.height) / pixelSizeFactor)
+  pixelSize = Math.ceil(Math.min(cvs.width, cvs.height) / obj.pixelSizeFactor)
   pixelW = pixelSize
   pixelH = pixelSize * pixelRaito
   numCols = Math.ceil(Math.ceil(cvs.width / pixelW) * effectWidth)
@@ -351,21 +339,15 @@ const refresh = () => {
   fontSize = pixelSize / 0.65
   ctx.font = fontSize + "px " + fontFamily
 
-  fontColor = obj.fontColor
-  fontColor2 = obj.fontColor2
-  fontHue = getHueFromHex(fontColor)
+  fontHue = getHueFromHex(obj.fontColor)
 
-  backgroundColor = obj.backgroundColor
-  backgroundRGB = hexToRgb(backgroundColor)
-  backgroundHue = getHueFromHex(backgroundColor)
-  backgroundSaturation = obj.backgroundSaturation
+  backgroundRGB = hexToRgb(obj.backgroundColor)
+  backgroundHue = getHueFromHex(obj.backgroundColor)
 
   backgroundGradient = obj.backgroundGradient
   threshold = obj.threshold / 100
-  textInput = obj.textInput
   counter = 0
   randomness = obj.randomness / 100
-  invertToggle = obj.invert
   randomColumnArray = []
   startingRowArray = []
 
