@@ -31,7 +31,7 @@ const webcam = () => {
 }
 
 const dVideo = {
-  width: 480,
+  width: 476,
   height: 848,
 }
 
