@@ -139,8 +139,10 @@ const render = (context) => {
 
 //draw the text and background color for each frame onto the final canvas
 const renderText = () => {
-  ctx.fillStyle = obj.backgroundColor
-  ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+  if (obj.ifBackground) {
+    ctx.fillStyle = obj.backgroundColor
+    ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+  }
 
   for (var col = 0; col < numCols; col++) {
     for (var row = 0; row < numRows; row++) {
@@ -275,8 +277,10 @@ const renderText = () => {
 }
 
 const renderSVG = () => {
-  ctx.fillStyle = obj.backgroundColor
-  ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+  if (obj.ifBackground) {
+    ctx.fillStyle = obj.backgroundColor
+    ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+  }
 
   for (var col = 0; col < numCols; col++) {
     for (var row = 0; row < numRows; row++) {
@@ -297,8 +301,10 @@ const renderSVG = () => {
 }
 
 const renderTree = () => {
-  ctx.fillStyle = obj.backgroundColor
-  ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+  if (obj.ifBackground) {
+    ctx.fillStyle = obj.backgroundColor
+    ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+  }
 
   const arr = quadTreeFlat(grayscaleDataArray)
 
@@ -384,8 +390,8 @@ function loop() {
     }
 
     // renderText()
-    // renderSVG()
-    renderTree()
+    renderSVG()
+    // renderTree()
 
     if (record.state == true) {
       renderCanvasToVideoFrameAndEncode({

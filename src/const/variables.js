@@ -1,4 +1,5 @@
 const obj = {
+  ifBackground: false,
   // backgroundColor: "#080c37",
   backgroundColor: "#000000",
   backgroundGradient: true,

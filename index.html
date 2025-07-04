@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Video-to-ASCII</title>
+    <title>BRAT</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="style.css" />
@@ -18,8 +18,8 @@
     <div id="gui"></div>
 
     <div id="canvasDiv">
-      <div id="effectWidthDiv">
-        <pre><span class="tableText" id="effectWidthLabel">Effect Width</span><br><input class="input-number-noSpinners" type="range" id="effectWidthInput" value="50" min="0" max="100"></pre>
+      <div id="effectWidthDiv" style="display: none">
+        <pre><span class="tableText" id="effectWidthLabel">Effect Width</span><br><input class="input-number-noSpinners" type="range" id="effectWidthInput" value="100" min="0" max="100"></pre>
       </div>
 
       <canvas id="canvas" class=""></canvas>
@@ -34,14 +34,14 @@
         muted
         playsinline
       >
-        <source src="assets/waves.mp4" type="video/mp4" />
+        <source src="assets/test.mp4" type="video/mp4" />
       </video>
 
       <canvas id="canvas-video" class="hidden"></canvas>
       <canvas id="canvas-video-pixel" class="hidden"></canvas>
     </div>
 
-    <table id="buttonTable">
+    <table id="buttonTable" style="display: none">
       <tr>
         <td>
           <label for="fileInput" class="custom-file-upload" id="fileInputLabel">

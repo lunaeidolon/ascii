@@ -146,16 +146,14 @@ fileInput.addEventListener("change", (e) => {
   const url = URL.createObjectURL(file)
   userVideo.src = url
   userVideo.addEventListener("loadedmetadata", () => {
-    userVideo.width = userVideo.videoWidth
-    userVideo.height = userVideo.videoHeight
+    userVideo.width = userVideo.videoWidth / 2
+    userVideo.height = userVideo.videoHeight / 2
     console.log(
       "user video width/height: " + userVideo.width + ", " + userVideo.height,
     )
 
-    cvs.width = Math.min(userVideo.videoWidth, cvs.maxWidth)
-    cvs.height = Math.floor(
-      cvs.width * (userVideo.videoHeight / userVideo.videoWidth),
-    )
+    cvs.width = Math.min(userVideo.width, cvs.maxWidth)
+    cvs.height = Math.floor(cvs.width * (userVideo.height / userVideo.width))
 
     canvas.width = cvs.width * dpr
     canvas.height = cvs.height * dpr

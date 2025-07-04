@@ -15,7 +15,9 @@
   },
   "dependencies": {
     "dat.gui": "0.7.9",
+    "lil-gui": "^0.20.0",
     "mp4-muxer": "4.3.3",
-    "ndarray": "^1.0.19"
+    "ndarray": "^1.0.19",
+    "tweakpane": "^4.0.5"
   }
 }
