@@ -35,6 +35,25 @@ const initGUI = () => {
     .onFinishChange(refresh)
   // gui.add(obj, "backgroundGradient").name("Bg Gradient?").onChange(refresh)
   // gui
+  //   .addColor(obj, "offset")
+  //   .name("Offset")
+  //   .onFinishChange(refresh)
+  gui
+    .add(obj, "offsetLength")
+    .min(0)
+    .max(6)
+    .step(1)
+    .name("Offset")
+    .onChange(refresh)
+
+  gui
+    .add(obj, "opacity")
+    .min(0)
+    .max(100)
+    .step(1)
+    .name("Opacity")
+    .onChange(refresh)
+  // gui
   //   .add(obj, "backgroundSaturation")
   //   .min(0)
   //   .max(100)

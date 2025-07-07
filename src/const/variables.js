@@ -1,10 +1,14 @@
-const obj = {
+let obj
+
+const objDefault = {
   ifBackground: true,
   // backgroundColor: "#080c37",
   backgroundColor: "#000000",
   backgroundGradient: true,
   // backgroundSaturation: 60,
   backgroundSaturation: 0,
+  offsetLength: 1,
+  opacity: 100,
   fontColor: "#c7205b",
   fontColor2: "#0032ff",
   fontSizeFactor: 3,
@@ -14,6 +18,18 @@ const obj = {
   randomness: 0,
   invert: false,
   animationType: "Random Text",
+}
+
+const localObj = localStorage.getItem("bart")
+if (localObj) {
+  try {
+    obj = JSON.parse(localObj)
+  } catch (e) {
+    console.warn("localStorage 中数据解析失败，使用默认值")
+    obj = objDefault
+  }
+} else {
+  obj = objDefault
 }
 
 const webcam = () => {

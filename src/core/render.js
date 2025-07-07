@@ -340,8 +340,24 @@ const renderBrad = () => {
   //   { c: "A", offset: -0.5, offsetA: fontResizeFactor * 2 - 1.5 },
   //   { c: "T", offset: -1, offsetA: fontResizeFactor * 3 - 2 },
   // ]
-  const charsA = ["1", "2", "2", "3", "3", "2", "3"]
-  const charsB = ["4", "3", "2", "3", "5", "2", "2"]
+  const charsA = [
+    { c: "1", o: false },
+    { c: "2", o: true },
+    { c: "2", o: false },
+    { c: "3", o: false },
+    { c: "3", o: false },
+    { c: "2", o: false },
+    { c: "3", o: false },
+  ]
+  const charsB = [
+    { c: "4", o: false },
+    { c: "3", o: false },
+    { c: "2", o: false },
+    { c: "3", o: false },
+    { c: "5", o: false },
+    { c: "2", o: false },
+    { c: "2", o: true },
+  ]
 
   const charsLength = charsA.length
   let charIndex = 0
@@ -357,9 +373,11 @@ const renderBrad = () => {
   let charSet = charsA
 
   for (var row = 0; row < numRows; row++) {
+    const rowOdd = Math.floor((row - 2) / 2) % 2 === 0 // 奇数
+
     for (var col = 0; col < numCols; col++) {
       if (col === 0) {
-        charIndex = 0
+        charIndex = rowOdd ? 0 : obj.offsetLength
         charOffset = 0
 
         charSet = row % 2 === 0 ? charsA : charsB
@@ -367,16 +385,16 @@ const renderBrad = () => {
       const char = charSet[charIndex]
 
       const color = grayscaleDataArray[row][col][1]
-      ctx.fillStyle = `rgb(${color[0].toFixed(0)}, ${color[1].toFixed(
+      ctx.fillStyle = `rgba(${color[0].toFixed(0)}, ${color[1].toFixed(
         0,
-      )}, ${color[2].toFixed(0)})`
+      )}, ${color[2].toFixed(0)}, ${char.o ? obj.opacity / 100 : 1})`
       ctx.font = fontResize + "px " + fontFamily
       // ctx.fillText(
       //   char.c,
       //   col * pixelW + char.offset * fontResize - charOffset * fontResize,
       //   row * pixelH * 1.8 + pixelH,
       // )
-      ctx.fillText(char, col * pixelW, row * pixelH + pixelH)
+      ctx.fillText(char.c, col * pixelW, row * pixelH + pixelH)
       nextChar()
       // charOffset += 0.2
     }
@@ -424,6 +442,8 @@ const refresh = () => {
       randomColumnArray[i] = false
     }
   }
+
+  localStorage.setItem("brat", JSON.stringify(obj))
 }
 
 effectWidthInput.addEventListener("change", refresh)
