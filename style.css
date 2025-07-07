@@ -139,7 +139,7 @@ h2 {
   display: block;
   margin-top: 3.5vh;
   margin: 0 auto;
-  max-width: 1080px;
+  /* max-width: 1080px; */
 }
 
 #canvas {

@@ -51,13 +51,13 @@ const initGUI = () => {
   //   .step(1)
   //   .name("Font Size Factor")
   //   .onChange(refresh)
-  // gui
-  //   .add(obj, "pixelSizeFactor")
-  //   .min(10)
-  //   .max(200)
-  //   .step(1)
-  //   .name("Resolution")
-  //   .onChange(refresh)
+  gui
+    .add(obj, "pixelSizeFactor")
+    .min(10)
+    .max(200)
+    .step(1)
+    .name("Resolution")
+    .onChange(refresh)
   // gui
   //   .add(obj, "threshold")
   //   .min(0)
@@ -90,10 +90,10 @@ const initGUI = () => {
   }
   gui.add(obj, "saveImage").name("Export Image")
 
-  // obj["saveVideo"] = function () {
-  //   toggleVideoRecord()
-  // }
-  // gui.add(obj, "saveVideo").name("Start/Stop Video Export")
+  obj["saveVideo"] = function () {
+    toggleVideoRecord()
+  }
+  gui.add(obj, "saveVideo").name("Start/Stop Video Export")
 
   let customContainer = document.getElementById("gui")
   customContainer.appendChild(gui.domElement)

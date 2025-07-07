@@ -98,10 +98,12 @@ async function recordVideoMuxer() {
   // See https://dmnsgn.github.io/media-codecs for list of codecs and see if your browser supports
   record.videoEncoder.configure({
     codec: "avc1.42003e",
+    // codec: "vp8",
     width: videoWidth,
     height: videoHeight,
     bitrate: 14_000_000,
     bitrateMode: "constant",
+    framerate: 120,
   })
   //NEW codec: "avc1.42003e",
   //ORIGINAL codec: "avc1.42001f",

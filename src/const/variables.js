@@ -1,5 +1,5 @@
 const obj = {
-  ifBackground: false,
+  ifBackground: true,
   // backgroundColor: "#080c37",
   backgroundColor: "#000000",
   backgroundGradient: true,
@@ -31,8 +31,8 @@ const webcam = () => {
 }
 
 const dVideo = {
-  width: 476,
-  height: 848,
+  width: (1920 * 3) / 4,
+  height: (1080 * 3) / 4,
 }
 
 const cvs = {

@@ -25,14 +25,15 @@ import {
 import { record, renderCanvasToVideoFrameAndEncode } from "./record"
 
 var pixelSize
-var pixelRaito = 2
+var pixelRaito = 1
 var pixelW
 var pixelH
 var numCols
 var numRows
 var alpha = 1
 
-var fontFamily = "Courier New"
+// var fontFamily = "Courier New"
+var fontFamily = "brat"
 var fontSize
 //this defines the character set. ordered by darker to lighter colour
 const gradient = "____``..--^^~~<>??123456789%%&&@@"
@@ -324,13 +325,71 @@ const renderTree = () => {
   }
 }
 
+const renderBrad = () => {
+  if (obj.ifBackground) {
+    ctx.fillStyle = obj.backgroundColor
+    ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+  }
+
+  const fontResizeFactor = 0
+  const fontResize = fontSize * (1 + fontResizeFactor)
+
+  // const chars = [
+  //   { c: "B", offset: 0, offsetA: 0 },
+  //   { c: "R", offset: 0, offsetA: fontResizeFactor },
+  //   { c: "A", offset: -0.5, offsetA: fontResizeFactor * 2 - 1.5 },
+  //   { c: "T", offset: -1, offsetA: fontResizeFactor * 3 - 2 },
+  // ]
+  const charsA = ["1", "2", "2", "3", "3", "2", "3"]
+  const charsB = ["4", "3", "2", "3", "5", "2", "2"]
+
+  const charsLength = charsA.length
+  let charIndex = 0
+  function nextChar() {
+    if (charIndex + 1 === charsLength) {
+      charIndex = 0
+    } else {
+      charIndex++
+    }
+  }
+
+  let charOffset = 0
+  let charSet = charsA
+
+  for (var row = 0; row < numRows; row++) {
+    for (var col = 0; col < numCols; col++) {
+      if (col === 0) {
+        charIndex = 0
+        charOffset = 0
+
+        charSet = row % 2 === 0 ? charsA : charsB
+      }
+      const char = charSet[charIndex]
+
+      const color = grayscaleDataArray[row][col][1]
+      ctx.fillStyle = `rgb(${color[0].toFixed(0)}, ${color[1].toFixed(
+        0,
+      )}, ${color[2].toFixed(0)})`
+      ctx.font = fontResize + "px " + fontFamily
+      // ctx.fillText(
+      //   char.c,
+      //   col * pixelW + char.offset * fontResize - charOffset * fontResize,
+      //   row * pixelH * 1.8 + pixelH,
+      // )
+      ctx.fillText(char, col * pixelW, row * pixelH + pixelH)
+      nextChar()
+      // charOffset += 0.2
+    }
+  }
+}
+
 const refresh = () => {
   console.log("refresh")
   console.log("canvas width/height: " + cvs.width + ", " + cvs.height)
 
-  document
-    .getElementById("canvasDiv")
-    .setAttribute("style", "width: " + cvs.width + "px;")
+  // document
+  //   .getElementById("canvasDiv")
+  //   .setAttribute("style", "width: " + cvs.width + "px;")
   //effectWidthInput.style.width = cvs.width;
   effectWidth = Number(effectWidthInput.value) / 100
   if (effectWidth > 0.99) effectWidth = 0.99
@@ -342,7 +401,7 @@ const refresh = () => {
   pixelH = pixelSize * pixelRaito
   numCols = Math.ceil(Math.ceil(cvs.width / pixelW) * effectWidth)
   numRows = Math.ceil(cvs.height / pixelH)
-  fontSize = pixelSize / 0.65
+  fontSize = pixelSize
   ctx.font = fontSize + "px " + fontFamily
 
   fontHue = getHueFromHex(obj.fontColor)
@@ -390,8 +449,9 @@ function loop() {
     }
 
     // renderText()
-    renderSVG()
+    // renderSVG()
     // renderTree()
+    renderBrad()
 
     if (record.state == true) {
       renderCanvasToVideoFrameAndEncode({
