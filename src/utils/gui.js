@@ -29,10 +29,10 @@ const initGUI = () => {
 
   gui.add(obj, "ifBackground").name("Background").onFinishChange(refresh)
 
-  // gui
-  //   .addColor(obj, "backgroundColor")
-  //   .name("Background Color")
-  //   .onFinishChange(refresh)
+  gui
+    .addColor(obj, "backgroundColor")
+    .name("Background Color")
+    .onFinishChange(refresh)
   // gui.add(obj, "backgroundGradient").name("Bg Gradient?").onChange(refresh)
   // gui
   //   .add(obj, "backgroundSaturation")
