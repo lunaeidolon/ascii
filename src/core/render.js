@@ -2,7 +2,7 @@
 import { imagePaths, imageCache } from "./bitmap"
 import { quadTreeFlat } from "../utils/quadtree"
 
-import { obj, cvs, types, anime } from "../const/variables"
+import { obj, mediaSize, types, anime } from "../const/variables"
 import {
   webcamVideo,
   userVideo,
@@ -71,27 +71,56 @@ const getBitmapByScale = (scale) => {
 }
 
 const render = (context) => {
-  if (cvs.width && cvs.height) {
-    canvasRaw.width = cvs.width
-    canvasRaw.height = cvs.height
+  if (mediaSize.width && mediaSize.height) {
+    canvasRaw.width = mediaSize.width
+    canvasRaw.height = mediaSize.height
 
     //choose video feed
     if (types.video == "Webcam") {
-      context.drawImage(webcamVideo, 0, 0, cvs.width / dpr, cvs.height / dpr)
+      context.drawImage(
+        webcamVideo,
+        0,
+        0,
+        mediaSize.width / dpr,
+        mediaSize.height / dpr,
+      )
     } else if (types.video == "Select Video") {
-      context.drawImage(userVideo, 0, 0, cvs.width / dpr, cvs.height / dpr)
+      context.drawImage(
+        userVideo,
+        0,
+        0,
+        mediaSize.width / dpr,
+        mediaSize.height / dpr,
+      )
     } else if (types.video == "Default") {
-      context.drawImage(defaultVideo, 0, 0, cvs.width / dpr, cvs.height / dpr)
+      context.drawImage(
+        defaultVideo,
+        0,
+        0,
+        mediaSize.width / dpr,
+        mediaSize.height / dpr,
+      )
     } else if (types.video === "image") {
-      context.drawImage(imageEl, 0, 0, cvs.width / dpr, cvs.height / dpr)
+      context.drawImage(
+        imageEl,
+        0,
+        0,
+        mediaSize.width / dpr,
+        mediaSize.height / dpr,
+      )
     }
 
-    var pixelData = context.getImageData(0, 0, cvs.width, cvs.height)
+    var pixelData = context.getImageData(
+      0,
+      0,
+      mediaSize.width,
+      mediaSize.height,
+    )
     var pixels = pixelData.data
 
     //new canvas with a pixelated image
-    canvasPixel.width = cvs.width
-    canvasPixel.height = cvs.height
+    canvasPixel.width = mediaSize.width
+    canvasPixel.height = mediaSize.height
     grayscaleDataArray = []
 
     for (var cellY = 0; cellY < numRows; cellY++) {
@@ -106,9 +135,12 @@ const render = (context) => {
             var currentYPosition = cellY * pixelH + pixelY
 
             var currentPixelDataValue =
-              (currentYPosition * cvs.width + currentXPosition) * 4
+              (currentYPosition * mediaSize.width + currentXPosition) * 4
 
-            if (currentXPosition < cvs.width && currentYPosition < cvs.height) {
+            if (
+              currentXPosition < mediaSize.width &&
+              currentYPosition < mediaSize.height
+            ) {
               cellPixels.push(pixels[currentPixelDataValue])
               cellPixels.push(pixels[currentPixelDataValue + 1])
               cellPixels.push(pixels[currentPixelDataValue + 2])
@@ -125,7 +157,7 @@ const render = (context) => {
     }
   } else {
     context.fillStyle = "#fff"
-    context.fillRect(0, 0, cvs.width, cvs.height)
+    context.fillRect(0, 0, mediaSize.width, mediaSize.height)
   }
 }
 
@@ -133,7 +165,7 @@ const render = (context) => {
 const renderText = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, cvs.width, cvs.height)
+    ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
   }
 
   for (var col = 0; col < numCols; col++) {
@@ -271,7 +303,7 @@ const renderText = () => {
 const renderSVG = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, cvs.width, cvs.height)
+    ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
   }
 
   for (var col = 0; col < numCols; col++) {
@@ -295,7 +327,7 @@ const renderSVG = () => {
 const renderTree = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, cvs.width, cvs.height)
+    ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
   }
 
   const arr = quadTreeFlat(grayscaleDataArray)
@@ -319,7 +351,7 @@ const renderTree = () => {
 const renderBrad = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, cvs.width, cvs.height)
+    ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
   }
 
   const fontResizeFactor = 0
@@ -394,13 +426,17 @@ const renderBrad = () => {
 
 const refresh = () => {
   console.log("refresh")
-  console.log("canvas width/height: " + cvs.width + ", " + cvs.height)
+  console.log(
+    "canvas width/height: " + mediaSize.width + ", " + mediaSize.height,
+  )
 
-  pixelSize = Math.ceil(Math.min(cvs.width, cvs.height) / obj.pixelSizeFactor)
+  pixelSize = Math.ceil(
+    Math.min(mediaSize.width, mediaSize.height) / obj.pixelSizeFactor,
+  )
   pixelW = pixelSize
   pixelH = pixelSize * pixelRaito
-  numCols = Math.ceil(Math.ceil(cvs.width / pixelW) + 1)
-  numRows = Math.ceil(cvs.height / pixelH)
+  numCols = Math.ceil(Math.ceil(mediaSize.width / pixelW) + 1)
+  numRows = Math.ceil(mediaSize.height / pixelH)
 
   const targetWidth = numCols * pixelW
   const targetHeight = numRows * pixelH + 2
@@ -456,15 +492,15 @@ function loop() {
 
     //draw the chosen video onto the final canvas
     if (types.video == "Webcam") {
-      ctx.drawImage(webcamVideo, 0, 0, cvs.width, cvs.height)
+      ctx.drawImage(webcamVideo, 0, 0, mediaSize.width, mediaSize.height)
     } else if (types.video == "Select Video") {
-      ctx.drawImage(userVideo, 0, 0, cvs.width, cvs.height)
+      ctx.drawImage(userVideo, 0, 0, mediaSize.width, mediaSize.height)
     } else if (types.video == "Default") {
-      ctx.drawImage(defaultVideo, 0, 0, cvs.width, cvs.height)
+      ctx.drawImage(defaultVideo, 0, 0, mediaSize.width, mediaSize.height)
     } else if (types.video === "image") {
-      console.log(cvs.width, cvs.height)
+      console.log(mediaSize.width, mediaSize.height)
 
-      ctx.drawImage(imageEl, 0, 0, cvs.width, cvs.height)
+      ctx.drawImage(imageEl, 0, 0, mediaSize.width, mediaSize.height)
     }
 
     // renderText()

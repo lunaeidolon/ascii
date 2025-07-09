@@ -1,5 +1,5 @@
 import { canvas, ctx, dpr, imageEl } from "../const/dom"
-import { webcam, dVideo, cvs, types, anime } from "../const/variables"
+import { webcam, dVideo, mediaSize, types, anime } from "../const/variables"
 import { loop, refresh, renderBrad } from "./render"
 import { isIOS, isAndroid } from "../utils/broswer"
 
@@ -41,13 +41,13 @@ function startDefaultVideo() {
     console.log("cancel animation")
   }
 
-  cvs.width = dVideo.width
-  cvs.height = dVideo.height
-  canvas.width = cvs.width * dpr
-  canvas.height = cvs.height * dpr
+  mediaSize.width = dVideo.width
+  mediaSize.height = dVideo.height
+  canvas.width = mediaSize.width * dpr
+  canvas.height = mediaSize.height * dpr
 
-  canvas.style.width = cvs.width + "px"
-  canvas.style.height = cvs.height + "px"
+  canvas.style.width = mediaSize.width + "px"
+  canvas.style.height = mediaSize.height + "px"
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
 
@@ -91,13 +91,13 @@ function startWebcam() {
       )
       webcam.height = Math.round(webcam.width / webcam.aspectRatio)
 
-      cvs.width = webcam.width
-      cvs.height = webcam.height
-      canvas.width = cvs.width * dpr
-      canvas.height = cvs.height * dpr
+      mediaSize.width = webcam.width
+      mediaSize.height = webcam.height
+      canvas.width = mediaSize.width * dpr
+      canvas.height = mediaSize.height * dpr
 
-      canvas.style.width = cvs.width + "px"
-      canvas.style.height = cvs.height + "px"
+      canvas.style.width = mediaSize.width + "px"
+      canvas.style.height = mediaSize.height + "px"
 
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
 
@@ -151,8 +151,10 @@ fileInput.addEventListener("change", (e) => {
         "user video width/height: " + userVideo.width + ", " + userVideo.height,
       )
 
-      cvs.width = Math.min(userVideo.width, cvs.maxWidth)
-      cvs.height = Math.floor(cvs.width * (userVideo.height / userVideo.width))
+      mediaSize.width = Math.min(userVideo.width, mediaSize.maxWidth)
+      mediaSize.height = Math.floor(
+        mediaSize.width * (userVideo.height / userVideo.width),
+      )
     })
 
     setTimeout(function () {
@@ -166,8 +168,8 @@ fileInput.addEventListener("change", (e) => {
 
     imageEl.src = url
     imageEl.onload = (img) => {
-      cvs.width = imageEl.width
-      cvs.height = imageEl.height
+      mediaSize.width = imageEl.width
+      mediaSize.height = imageEl.height
 
       refresh()
       anime.playAnimationToggle = true

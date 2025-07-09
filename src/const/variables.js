@@ -51,7 +51,7 @@ const dVideo = {
   height: (1080 * 3) / 4,
 }
 
-const cvs = {
+const mediaSize = {
   width: dVideo.width,
   height: dVideo.height,
   maxWidth: 1080,
@@ -63,4 +63,4 @@ const types = {
 
 const anime = { animationRequest: null, playAnimationToggle: false }
 
-export { obj, webcam, dVideo, cvs, types, anime }
+export { obj, webcam, dVideo, mediaSize, types, anime }
