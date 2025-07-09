@@ -348,7 +348,7 @@ const renderTree = () => {
   }
 }
 
-const renderBrad = () => {
+const renderBrat = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
     ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
@@ -506,7 +506,7 @@ function loop() {
     // renderText()
     // renderSVG()
     // renderTree()
-    renderBrad()
+    renderBrat()
 
     if (types.video !== "image") {
       if (record.state == true) {
@@ -524,4 +524,4 @@ function loop() {
   }
 }
 
-export { render, renderText, renderBrad, refresh, loop }
+export { render, renderText, renderBrat, refresh, loop }
