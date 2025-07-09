@@ -10,7 +10,7 @@ initGUI()
 
 font.load().then(function (loadedFont) {
   document.fonts.add(loadedFont) // 注册字体
-  console.log(loadedFont)
+  // console.log(loadedFont)
 
   refresh()
   startDefaultVideo()

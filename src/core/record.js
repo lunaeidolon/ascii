@@ -97,13 +97,13 @@ async function recordVideoMuxer() {
   // This codec should work in most browsers
   // See https://dmnsgn.github.io/media-codecs for list of codecs and see if your browser supports
   record.videoEncoder.configure({
-    codec: "avc1.42003e",
-    // codec: "vp8",
+    // codec: "avc1.42003e",
+    codec: "vp09.02.62.10",
     width: videoWidth,
     height: videoHeight,
     bitrate: 14_000_000,
     bitrateMode: "constant",
-    framerate: 120,
+    framerate: 60,
   })
   //NEW codec: "avc1.42003e",
   //ORIGINAL codec: "avc1.42001f",
@@ -172,7 +172,7 @@ function downloadBlob() {
   a.style.display = "none"
   a.href = url
   const date = new Date()
-  const filename = `ASCII_${date.toLocaleDateString()}_${date.toLocaleTimeString()}.mp4`
+  const filename = `BRAT_${date.toLocaleDateString()}_${date.toLocaleTimeString()}.mp4`
   a.download = filename
   document.body.appendChild(a)
   a.click()

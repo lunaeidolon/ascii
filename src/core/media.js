@@ -1,9 +1,7 @@
-import { ctx, dpr } from "../const/dom"
+import { canvas, ctx, dpr, imageEl } from "../const/dom"
 import { webcam, dVideo, cvs, types, anime } from "../const/variables"
-import { loop, refresh } from "./render"
+import { loop, refresh, renderBrad } from "./render"
 import { isIOS, isAndroid } from "../utils/broswer"
-
-// canvas dpr
 
 function togglePausePlay() {
   if (anime.playAnimationToggle == false) {
@@ -28,7 +26,6 @@ function changeVideoType() {
   if (types.video == "Webcam") {
     startWebcam()
   } else if (types.video == "Select Video") {
-    console.log("select video file")
     selectVideo()
   } else if (types.video == "Default") {
     startDefaultVideo()
@@ -140,36 +137,59 @@ fileInput.addEventListener("change", (e) => {
     console.log("cancel animation")
   }
 
-  types.video = "Select Video"
-
   const file = e.target.files[0]
+  const type = file.type.split("/")[0]
   const url = URL.createObjectURL(file)
-  userVideo.src = url
-  userVideo.addEventListener("loadedmetadata", () => {
-    userVideo.width = userVideo.videoWidth / 2
-    userVideo.height = userVideo.videoHeight / 2
-    console.log(
-      "user video width/height: " + userVideo.width + ", " + userVideo.height,
-    )
 
-    cvs.width = Math.min(userVideo.width, cvs.maxWidth)
-    cvs.height = Math.floor(cvs.width * (userVideo.height / userVideo.width))
+  if (type === "video") {
+    types.video = "Select Video"
+    userVideo.src = url
+    userVideo.addEventListener("loadedmetadata", () => {
+      userVideo.width = userVideo.videoWidth / 2
+      userVideo.height = userVideo.videoHeight / 2
+      console.log(
+        "user video width/height: " + userVideo.width + ", " + userVideo.height,
+      )
 
-    canvas.width = cvs.width * dpr
-    canvas.height = cvs.height * dpr
+      cvs.width = Math.min(userVideo.width, cvs.maxWidth)
+      cvs.height = Math.floor(cvs.width * (userVideo.height / userVideo.width))
 
-    canvas.style.width = cvs.width + "px"
-    canvas.style.height = cvs.height + "px"
+      canvas.width = cvs.width * dpr
+      canvas.height = cvs.height * dpr
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
-  })
+      canvas.style.width = cvs.width + "px"
+      canvas.style.height = cvs.height + "px"
 
-  setTimeout(function () {
-    userVideo.play()
-    refresh()
-    anime.playAnimationToggle = true
-    anime.animationRequest = requestAnimationFrame(loop)
-  }, 2000)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
+    })
+
+    setTimeout(function () {
+      userVideo.play()
+      refresh()
+      anime.playAnimationToggle = true
+      anime.animationRequest = requestAnimationFrame(loop)
+    }, 2000)
+  } else if (type === "image") {
+    types.video = "image"
+
+    imageEl.src = url
+    imageEl.onload = (img) => {
+      cvs.width = imageEl.width
+      cvs.height = imageEl.height
+
+      canvas.width = imageEl.width * dpr
+      canvas.height = imageEl.height * dpr
+
+      canvas.style.width = imageEl.width + "px"
+      canvas.style.height = imageEl.height + "px"
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+      refresh()
+      anime.playAnimationToggle = true
+      anime.animationRequest = requestAnimationFrame(loop)
+    }
+  }
 })
 
 export {

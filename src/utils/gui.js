@@ -16,8 +16,7 @@ const initGUI = () => {
   // gui.close()
 
   obj["selectVideo"] = function () {
-    types.video = "Select Video"
-    fileInput.click()
+    selectVideo()
   }
   gui.add(obj, "selectVideo").name("Upload Video")
 

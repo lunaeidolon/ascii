@@ -2,6 +2,7 @@
 export const webcamVideo = document.getElementById("webcamVideo")
 export const userVideo = document.getElementById("userVideo")
 export const defaultVideo = document.getElementById("defaultVideo")
+export const imageEl = document.getElementById("image")
 
 const dpr = window.devicePixelRatio || 1
 

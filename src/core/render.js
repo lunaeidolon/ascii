@@ -7,6 +7,7 @@ import {
   webcamVideo,
   userVideo,
   defaultVideo,
+  imageEl,
   canvas,
   ctx,
   dpr,
@@ -86,17 +87,12 @@ const render = (context) => {
       context.drawImage(userVideo, 0, 0, cvs.width / dpr, cvs.height / dpr)
     } else if (types.video == "Default") {
       context.drawImage(defaultVideo, 0, 0, cvs.width / dpr, cvs.height / dpr)
+    } else if (types.video === "image") {
+      context.drawImage(imageEl, 0, 0, cvs.width / dpr, cvs.height / dpr)
     }
 
     var pixelData = context.getImageData(0, 0, cvs.width, cvs.height)
     var pixels = pixelData.data
-
-    // const test = ndarray(
-    //   new Uint8Array(pixels),
-    //   [cvs.width, cvs.height, 4],
-    //   [4, 4 * cvs.width, 1],
-    //   0,
-    // )
 
     //new canvas with a pixelated image
     canvasPixel.width = cvs.width
@@ -443,7 +439,10 @@ const refresh = () => {
     }
   }
 
-  localStorage.setItem("brat", JSON.stringify(obj))
+  if (types.video === "image") {
+    anime.animationRequest = requestAnimationFrame(loop)
+  }
+  // localStorage.setItem("brat", JSON.stringify(obj))
 }
 
 effectWidthInput.addEventListener("change", refresh)
@@ -457,15 +456,17 @@ function loop() {
     counter++
     render(ctx)
 
-    if (effectWidth < 1) {
-      //draw the chosen video onto the final canvas
-      if (types.video == "Webcam") {
-        ctx.drawImage(webcamVideo, 0, 0, cvs.width, cvs.height)
-      } else if (types.video == "Select Video") {
-        ctx.drawImage(userVideo, 0, 0, cvs.width, cvs.height)
-      } else if (types.video == "Default") {
-        ctx.drawImage(defaultVideo, 0, 0, cvs.width, cvs.height)
-      }
+    //draw the chosen video onto the final canvas
+    if (types.video == "Webcam") {
+      ctx.drawImage(webcamVideo, 0, 0, cvs.width, cvs.height)
+    } else if (types.video == "Select Video") {
+      ctx.drawImage(userVideo, 0, 0, cvs.width, cvs.height)
+    } else if (types.video == "Default") {
+      ctx.drawImage(defaultVideo, 0, 0, cvs.width, cvs.height)
+    } else if (types.video === "image") {
+      console.log(cvs.width, cvs.height)
+
+      ctx.drawImage(imageEl, 0, 0, cvs.width, cvs.height)
     }
 
     // renderText()
@@ -473,18 +474,20 @@ function loop() {
     // renderTree()
     renderBrad()
 
-    if (record.state == true) {
-      renderCanvasToVideoFrameAndEncode({
-        canvas,
-        videoEncoder: record.videoEncoder,
-        frameNumber: record.frameNumber,
-        videofps: record.videofps,
-      })
-      record.frameNumber++
-    }
+    if (types.video !== "image") {
+      if (record.state == true) {
+        renderCanvasToVideoFrameAndEncode({
+          canvas,
+          videoEncoder: record.videoEncoder,
+          frameNumber: record.frameNumber,
+          videofps: record.videofps,
+        })
+        record.frameNumber++
+      }
 
-    anime.animationRequest = requestAnimationFrame(loop)
+      anime.animationRequest = requestAnimationFrame(loop)
+    }
   }
 }
 
-export { render, renderText, refresh, loop }
+export { render, renderText, renderBrad, refresh, loop }

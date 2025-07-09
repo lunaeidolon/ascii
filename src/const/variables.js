@@ -20,17 +20,17 @@ const objDefault = {
   animationType: "Random Text",
 }
 
-const localObj = localStorage.getItem("bart")
-if (localObj) {
-  try {
-    obj = JSON.parse(localObj)
-  } catch (e) {
-    console.warn("localStorage 中数据解析失败，使用默认值")
-    obj = objDefault
-  }
-} else {
-  obj = objDefault
-}
+// const localObj = localStorage.getItem("bart")
+// if (localObj) {
+//   try {
+//     obj = JSON.parse(localObj)
+//   } catch (e) {
+//     console.warn("localStorage 中数据解析失败，使用默认值")
+//     obj = objDefault
+//   }
+// } else {
+obj = objDefault
+// }
 
 const webcam = () => {
   const aspectRatio = 1
@@ -59,7 +59,6 @@ const cvs = {
 
 const types = {
   video: "Default",
-  animation: obj.animationType,
 }
 
 const anime = { animationRequest: null, playAnimationToggle: false }
