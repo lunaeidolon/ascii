@@ -133,7 +133,7 @@ function saveImage() {
   link.href = canvas.toDataURL()
 
   const date = new Date()
-  const filename = `ASCII_${date.toLocaleDateString()}_${date.toLocaleTimeString()}.png`
+  const filename = `BRAT_${date.toLocaleDateString()}_${date.toLocaleTimeString()}.png`
   link.download = filename
   link.click()
 }
