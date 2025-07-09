@@ -401,6 +401,20 @@ const refresh = () => {
   pixelH = pixelSize * pixelRaito
   numCols = Math.ceil(Math.ceil(cvs.width / pixelW) + 1)
   numRows = Math.ceil(cvs.height / pixelH)
+
+  const targetWidth = numCols * pixelW
+  const targetHeight = numRows * pixelH + 2
+
+  console.log(targetWidth, targetHeight)
+
+  canvas.width = targetWidth * dpr
+  canvas.height = targetHeight * dpr
+
+  canvas.style.width = targetWidth + "px"
+  canvas.style.height = targetHeight + "px"
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
   fontSize = pixelSize
   ctx.font = fontSize + "px " + fontFamily
 

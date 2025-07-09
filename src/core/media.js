@@ -153,14 +153,6 @@ fileInput.addEventListener("change", (e) => {
 
       cvs.width = Math.min(userVideo.width, cvs.maxWidth)
       cvs.height = Math.floor(cvs.width * (userVideo.height / userVideo.width))
-
-      canvas.width = cvs.width * dpr
-      canvas.height = cvs.height * dpr
-
-      canvas.style.width = cvs.width + "px"
-      canvas.style.height = cvs.height + "px"
-
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
     })
 
     setTimeout(function () {
@@ -176,14 +168,6 @@ fileInput.addEventListener("change", (e) => {
     imageEl.onload = (img) => {
       cvs.width = imageEl.width
       cvs.height = imageEl.height
-
-      canvas.width = imageEl.width * dpr
-      canvas.height = imageEl.height * dpr
-
-      canvas.style.width = imageEl.width + "px"
-      canvas.style.height = imageEl.height + "px"
-
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
       refresh()
       anime.playAnimationToggle = true
