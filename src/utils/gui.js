@@ -18,7 +18,7 @@ const initGUI = () => {
   obj["selectVideo"] = function () {
     selectVideo()
   }
-  gui.add(obj, "selectVideo").name("Upload Video")
+  gui.add(obj, "selectVideo").name("Upload Media")
 
   obj["useWebcam"] = function () {
     types.video = "Webcam"
@@ -98,15 +98,15 @@ const initGUI = () => {
   //   .onChange(refresh)
   // gui.add(obj, "textInput").onFinishChange(refresh)
 
-  obj["pausePlay"] = function () {
-    togglePausePlay()
-  }
-  gui.add(obj, "pausePlay").name("Pause/Play Video")
-
   obj["saveImage"] = function () {
     saveImage()
   }
   gui.add(obj, "saveImage").name("Export Image")
+
+  obj["pausePlay"] = function () {
+    togglePausePlay()
+  }
+  gui.add(obj, "pausePlay").name("Pause/Play Video")
 
   obj["saveVideo"] = function () {
     toggleVideoRecord()
