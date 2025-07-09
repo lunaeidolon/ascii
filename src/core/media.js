@@ -1,6 +1,6 @@
 import { canvas, ctx, dpr, imageEl } from "../const/dom"
 import { webcam, dVideo, mediaSize, types, anime } from "../const/variables"
-import { loop, refresh, renderBrad } from "./render"
+import { loop, refresh, renderBrat } from "./render"
 import { isIOS, isAndroid } from "../utils/broswer"
 
 function togglePausePlay() {
