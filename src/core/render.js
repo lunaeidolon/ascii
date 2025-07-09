@@ -40,11 +40,6 @@ var fontSize
 const gradient = "____``..--^^~~<>??123456789%%&&@@"
 const preparedGradient = gradient.replaceAll("_", "\u00A0")
 
-var effectWidthInput = document.getElementById("effectWidthInput")
-effectWidthInput.style.width = cvs.width
-var effectWidth = Number(effectWidthInput.value) / 100
-var effectWidthLabel = document.getElementById("effectWidthLabel")
-
 var randomColumnArray = []
 var startingRowArray = []
 
@@ -138,7 +133,7 @@ const render = (context) => {
 const renderText = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+    ctx.fillRect(0, 0, cvs.width, cvs.height)
   }
 
   for (var col = 0; col < numCols; col++) {
@@ -276,7 +271,7 @@ const renderText = () => {
 const renderSVG = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+    ctx.fillRect(0, 0, cvs.width, cvs.height)
   }
 
   for (var col = 0; col < numCols; col++) {
@@ -300,7 +295,7 @@ const renderSVG = () => {
 const renderTree = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+    ctx.fillRect(0, 0, cvs.width, cvs.height)
   }
 
   const arr = quadTreeFlat(grayscaleDataArray)
@@ -324,7 +319,7 @@ const renderTree = () => {
 const renderBrad = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, cvs.width * effectWidth, cvs.height)
+    ctx.fillRect(0, 0, cvs.width, cvs.height)
   }
 
   const fontResizeFactor = 0
@@ -401,19 +396,10 @@ const refresh = () => {
   console.log("refresh")
   console.log("canvas width/height: " + cvs.width + ", " + cvs.height)
 
-  // document
-  //   .getElementById("canvasDiv")
-  //   .setAttribute("style", "width: " + cvs.width + "px;")
-  //effectWidthInput.style.width = cvs.width;
-  effectWidth = Number(effectWidthInput.value) / 100
-  if (effectWidth > 0.99) effectWidth = 0.99
-  effectWidthLabel.innerHTML =
-    "Effect Width: " + Math.round(effectWidth * 100) + "%"
-
   pixelSize = Math.ceil(Math.min(cvs.width, cvs.height) / obj.pixelSizeFactor)
   pixelW = pixelSize
   pixelH = pixelSize * pixelRaito
-  numCols = Math.ceil(Math.ceil(cvs.width / pixelW) * effectWidth)
+  numCols = Math.ceil(Math.ceil(cvs.width / pixelW) + 1)
   numRows = Math.ceil(cvs.height / pixelH)
   fontSize = pixelSize
   ctx.font = fontSize + "px " + fontFamily
@@ -444,8 +430,6 @@ const refresh = () => {
   }
   // localStorage.setItem("brat", JSON.stringify(obj))
 }
-
-effectWidthInput.addEventListener("change", refresh)
 
 //animation loop to go frame by frame
 function loop() {

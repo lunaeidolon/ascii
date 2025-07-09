@@ -268,20 +268,6 @@ input[type="checkbox"] {
   min-height: 20px;
 }
 
-#effectWidthDiv {
-  margin-top: 2vh;
-  margin-right: 0;
-  margin-left: 0;
-  padding: 0;
-}
-
-#effectWidthInput {
-  width: 100% !important;
-  min-width: 100% !important;
-  padding: 0;
-  margin: 0;
-}
-
 button {
   padding: 6px;
   font-weight: bold;
