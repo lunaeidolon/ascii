@@ -38,6 +38,9 @@ const initGUI = () => {
   //   .name("Offset")
   //   .onFinishChange(refresh)
   gui
+    .add(obj, "bratType", { Fill: "fill", Glitch: "glitch" })
+    .name("Animation Type")
+  gui
     .add(obj, "offsetLength")
     .min(0)
     .max(6)

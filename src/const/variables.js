@@ -18,6 +18,7 @@ const objDefault = {
   randomness: 0,
   invert: false,
   animationType: "Random Text",
+  bratType: "fill", // 'glitch'
 }
 
 // const localObj = localStorage.getItem("bart")
