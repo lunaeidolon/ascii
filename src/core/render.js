@@ -1,6 +1,7 @@
 // import ndarray from "ndarray"
 import { imagePaths, imageCache } from "./bitmap"
 import { quadTreeFlat } from "../utils/quadtree"
+import { renderGlitch, renderTest } from "./renderGlitch"
 
 import { obj, mediaSize, types, anime } from "../const/variables"
 import {
@@ -12,7 +13,6 @@ import {
   ctx,
   dpr,
   canvasRaw,
-  canvasPixel,
 } from "../const/dom"
 
 import {
@@ -75,40 +75,33 @@ const render = (context) => {
     canvasRaw.width = mediaSize.width
     canvasRaw.height = mediaSize.height
 
-    //choose video feed
-    if (types.video == "Webcam") {
-      context.drawImage(
-        webcamVideo,
-        0,
-        0,
-        mediaSize.width / dpr,
-        mediaSize.height / dpr,
-      )
-    } else if (types.video == "Select Video") {
-      context.drawImage(
-        userVideo,
-        0,
-        0,
-        mediaSize.width / dpr,
-        mediaSize.height / dpr,
-      )
-    } else if (types.video == "Default") {
-      context.drawImage(
-        defaultVideo,
-        0,
-        0,
-        mediaSize.width / dpr,
-        mediaSize.height / dpr,
-      )
-    } else if (types.video === "image") {
-      context.drawImage(
-        imageEl,
-        0,
-        0,
-        mediaSize.width / dpr,
-        mediaSize.height / dpr,
-      )
+    let source
+
+    switch (types.video) {
+      case "Webcam":
+        source = webcamVideo
+        break
+      case "Select Video":
+        source = userVideo
+        break
+      case "Default":
+        source = defaultVideo
+        break
+      case "image":
+        source = imageEl
+        break
+      default:
+        source = defaultVideo
+        break
     }
+
+    context.drawImage(
+      source,
+      0,
+      0,
+      mediaSize.width / dpr,
+      mediaSize.height / dpr,
+    )
 
     var pixelData = context.getImageData(
       0,
@@ -118,9 +111,6 @@ const render = (context) => {
     )
     var pixels = pixelData.data
 
-    //new canvas with a pixelated image
-    canvasPixel.width = mediaSize.width
-    canvasPixel.height = mediaSize.height
     grayscaleDataArray = []
 
     for (var cellY = 0; cellY < numRows; cellY++) {
@@ -154,6 +144,32 @@ const render = (context) => {
           0.299 * avgColor[0] + 0.587 * avgColor[1] + 0.114 * avgColor[2] //perceived luminosity value
         grayscaleDataArray[cellY][cellX] = [grayScaleValue, avgColor]
       }
+    }
+
+    if (obj.bratType === "fill") {
+      renderBrat()
+    } else if (obj.bratType === "glitch") {
+      // re-draw
+      context.drawImage(source, 0, 0, mediaSize.width, mediaSize.height)
+      renderGlitch(
+        grayscaleDataArray,
+        pixelSize,
+        pixelW,
+        pixelH,
+        numCols,
+        numRows,
+      )
+    } else if (obj.bratType === "test") {
+      // re-draw
+      context.drawImage(source, 0, 0, mediaSize.width, mediaSize.height)
+      renderTest(
+        grayscaleDataArray,
+        pixelSize,
+        pixelW,
+        pixelH,
+        numCols,
+        numRows,
+      )
     }
   } else {
     context.fillStyle = "#fff"
@@ -489,24 +505,6 @@ function loop() {
   if (anime.playAnimationToggle) {
     counter++
     render(ctx)
-
-    //draw the chosen video onto the final canvas
-    if (types.video == "Webcam") {
-      ctx.drawImage(webcamVideo, 0, 0, mediaSize.width, mediaSize.height)
-    } else if (types.video == "Select Video") {
-      ctx.drawImage(userVideo, 0, 0, mediaSize.width, mediaSize.height)
-    } else if (types.video == "Default") {
-      ctx.drawImage(defaultVideo, 0, 0, mediaSize.width, mediaSize.height)
-    } else if (types.video === "image") {
-      console.log(mediaSize.width, mediaSize.height)
-
-      ctx.drawImage(imageEl, 0, 0, mediaSize.width, mediaSize.height)
-    }
-
-    // renderText()
-    // renderSVG()
-    // renderTree()
-    renderBrat()
 
     if (types.video !== "image") {
       if (record.state == true) {

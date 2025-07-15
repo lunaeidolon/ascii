@@ -37,9 +37,34 @@ const initGUI = () => {
   //   .addColor(obj, "offset")
   //   .name("Offset")
   //   .onFinishChange(refresh)
-  gui
-    .add(obj, "bratType", { Fill: "fill", Glitch: "glitch" })
+  const bratType = gui
+    .add(obj, "bratType", { Fill: "fill", Glitch: "glitch", Test: "test" })
     .name("Animation Type")
+    .onChange((value) => {
+      if (value === "glitch") {
+        glitchSize.show()
+      } else {
+        glitchSize.hide()
+      }
+    })
+  const glitchSize = gui
+    .add(obj, "glitchSizeMax")
+    .min(1)
+    .max(10)
+    .step(1)
+    .name("Glitch Max Size")
+  const glitchLength = gui
+    .add(obj, "glitchSizeMax")
+    .min(1)
+    .max(10)
+    .step(1)
+    .name("Glitch Min Length")
+
+  if (obj.bratType !== "glitch") {
+    glitchSize.hide()
+    glitchLength.hide()
+  }
+
   gui
     .add(obj, "offsetLength")
     .min(0)

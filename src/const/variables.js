@@ -3,7 +3,7 @@ let obj
 const objDefault = {
   ifBackground: true,
   // backgroundColor: "#080c37",
-  backgroundColor: "#000000",
+  backgroundColor: "#ffffff",
   backgroundGradient: true,
   // backgroundSaturation: 60,
   backgroundSaturation: 0,
@@ -18,7 +18,9 @@ const objDefault = {
   randomness: 0,
   invert: false,
   animationType: "Random Text",
-  bratType: "fill", // 'glitch'
+  bratType: "glitch", // 'glitch'
+  glitchSizeMax: 8,
+  glitchLengthMin: 1,
 }
 
 // const localObj = localStorage.getItem("bart")
