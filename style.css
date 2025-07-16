@@ -142,6 +142,17 @@ h2 {
   /* max-width: 1080px; */
 }
 
+#canvasDiv video {
+  display: block;
+  min-width: 900px;
+  height: 90px;
+}
+
+#canvasDiv video::-webkit-media-controls-panel {
+  display: flex !important;
+  opacity: 1 !important;
+}
+
 #canvas {
   /*margin: 0 auto;
     padding: 0;
