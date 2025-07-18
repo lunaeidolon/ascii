@@ -95,8 +95,8 @@ const renderGlitch = (
     skip = 1
     charIndex = 0
     if (glitchDice()) {
-      const size = glitchSize()
-      const maxCol = Math.floor(numCols / size) - 1
+      let size = glitchSize()
+      const maxCol = Math.floor(numCols / size)
       const colSpan = randomSpan(maxCol)
 
       const glitchSpan = []
@@ -108,7 +108,12 @@ const renderGlitch = (
             ? numCols - 1
             : (spanIndex + 1) * size
         const startRow = cellY
-        const endRow = cellY + size > numRows - 1 ? numRows - 1 : cellY + size
+        let endRow = cellY + size > numRows - 1 ? numRows - 1 : cellY + size
+
+        if (endRow >= numRows - 1) {
+          endRow = numRows - 1
+          size = endRow - startRow
+        }
 
         glitchSpan.push({
           startCol,
