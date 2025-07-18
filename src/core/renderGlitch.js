@@ -5,12 +5,16 @@ import { obj } from "../const/variables"
 
 const chance = new Chance()
 
+const glitchDiceOverall = () => {
+  return chance.bool({ likelihood: obj.glitchRandom / 15 })
+}
+
 const glitchDice = () => {
-  return chance.bool({ likelihood: obj.pixelSizeFactor / 500 })
+  return chance.bool({ likelihood: obj.glitchMass })
 }
 
 const glitchSize = () => {
-  return chance.weighted([1, 2, 3, 4, 6, 8, 10], [1, 1, 1, 1, 1, 1, 1])
+  return chance.weighted([1, 2, 4, 8, 12], [1, 2, 4, 3, 2])
 }
 
 const randomSpan = (max = 60, min = 0) => {
@@ -30,8 +34,6 @@ const randomSpan = (max = 60, min = 0) => {
 const randomChar = () => {
   return chance.pickone(chars)
 }
-
-const glitchPool = []
 
 const getAverageColor = (pixels = []) => {
   var r = 0
@@ -77,7 +79,8 @@ function nextChar() {
   }
 }
 
-const glitchs = []
+let glitchs = []
+let glitchGapCount = 0
 
 const renderGlitch = (
   allPixels,
@@ -87,6 +90,20 @@ const renderGlitch = (
   numCols,
   numRows,
 ) => {
+  glitchGapCount++
+  // console.log(glitchGapCount)
+
+  if (glitchDiceOverall()) {
+    makeGlitch(allPixels, pixelSize, pixelW, pixelH, numCols, numRows)
+  }
+  renderGlitchMain(allPixels, pixelSize, pixelW, pixelH, numCols, numRows)
+}
+
+const makeGlitch = (allPixels, pixelSize, pixelW, pixelH, numCols, numRows) => {
+  console.log("make")
+
+  const glitchsTemp = []
+
   let skip = 1
   //   const width = pixelW * numCols
   //   const height = pixelH * numCols
@@ -127,16 +144,25 @@ const renderGlitch = (
         nextChar()
       }
 
-      glitchs.push(glitchSpan)
+      glitchsTemp.push(glitchSpan)
 
-      if (glitchs.length > 10) {
-        glitchs.shift()
+      if (glitchsTemp.length > 3) {
+        glitchs = glitchsTemp
       }
 
       skip = size
     }
   }
+}
 
+const renderGlitchMain = (
+  allPixels,
+  pixelSize,
+  pixelW,
+  pixelH,
+  numCols,
+  numRows,
+) => {
   if (glitchs.length > 0) {
     for (let g = 0; g < glitchs.length; g++) {
       const glitch = glitchs[g]

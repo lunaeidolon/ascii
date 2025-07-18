@@ -143,6 +143,7 @@ fileInput.addEventListener("change", (e) => {
 
   if (type === "video") {
     types.video = "Select Video"
+    userVideo.muted = false
     userVideo.src = url
     userVideo.addEventListener("loadedmetadata", () => {
       userVideo.width = userVideo.videoWidth / 2
@@ -178,10 +179,21 @@ fileInput.addEventListener("change", (e) => {
   }
 })
 
+function audioStream(video) {
+  const audioCtx = new AudioContext()
+  const sourceNode = audioCtx.createMediaElementSource(video)
+  const dest = audioCtx.createMediaStreamDestination()
+  sourceNode.connect(dest)
+  sourceNode.connect(audioCtx.destination)
+
+  return dest
+}
+
 export {
   togglePausePlay,
   changeVideoType,
   startDefaultVideo,
   startWebcam,
   stopVideo,
+  audioStream,
 }

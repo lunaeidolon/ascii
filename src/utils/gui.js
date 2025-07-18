@@ -47,18 +47,31 @@ const initGUI = () => {
         glitchSize.hide()
       }
     })
-  const glitchSize = gui
-    .add(obj, "glitchSizeMax")
+
+  const glitchRandom = gui
+    .add(obj, "glitchRandom")
     .min(1)
-    .max(10)
+    .max(100)
     .step(1)
-    .name("Glitch Max Size")
-  const glitchLength = gui
-    .add(obj, "glitchSizeMax")
-    .min(1)
-    .max(10)
-    .step(1)
-    .name("Glitch Min Length")
+    .name("Glitch Random")
+  // const glitchMass = gui
+  //   .add(obj, "glitchMass")
+  //   .min(1)
+  //   .max(100)
+  //   .step(1)
+  //   .name("Glitch Mass")
+  // const glitchSize = gui
+  //   .add(obj, "glitchSizeMax")
+  //   .min(1)
+  //   .max(10)
+  //   .step(1)
+  //   .name("Glitch Max Size")
+  // const glitchLength = gui
+  //   .add(obj, "glitchSizeMax")
+  //   .min(1)
+  //   .max(10)
+  //   .step(1)
+  //   .name("Glitch Min Length")
 
   if (obj.bratType !== "glitch") {
     glitchSize.hide()
