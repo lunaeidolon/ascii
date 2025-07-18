@@ -80,7 +80,6 @@ function nextChar() {
 }
 
 let glitchs = []
-let glitchGapCount = 0
 
 const renderGlitch = (
   allPixels,
@@ -90,7 +89,8 @@ const renderGlitch = (
   numCols,
   numRows,
 ) => {
-  glitchGapCount++
+  // console.log(pixelSize, pixelW, pixelH, numCols, numRows)
+
   // console.log(glitchGapCount)
 
   if (glitchDiceOverall()) {
@@ -100,8 +100,6 @@ const renderGlitch = (
 }
 
 const makeGlitch = (allPixels, pixelSize, pixelW, pixelH, numCols, numRows) => {
-  console.log("make")
-
   const glitchsTemp = []
 
   let skip = 1
@@ -199,6 +197,10 @@ const renderGlitchMain = (
   }
 }
 
+function resetGlitch() {
+  glitchs = []
+}
+
 const gap = 3
 
 const renderTest = (allPixels, pixelSize, pixelW, pixelH, numCols, numRows) => {
@@ -228,4 +230,4 @@ const renderTest = (allPixels, pixelSize, pixelW, pixelH, numCols, numRows) => {
   charIndex = 0
 }
 
-export { renderGlitch, renderTest }
+export { renderGlitch, renderTest, resetGlitch }

@@ -1,7 +1,8 @@
-import { canvas, ctx, dpr, imageEl } from "../const/dom"
+import { canvas, ctx, defaultVideo, dpr, imageEl } from "../const/dom"
 import { webcam, dVideo, mediaSize, types, anime } from "../const/variables"
 import { loop, refresh, renderBrat } from "./render"
 import { isIOS, isAndroid } from "../utils/broswer"
+import { resetGlitch } from "./renderGlitch"
 
 function togglePausePlay() {
   if (anime.playAnimationToggle == false) {
@@ -142,6 +143,7 @@ fileInput.addEventListener("change", (e) => {
   const url = URL.createObjectURL(file)
 
   if (type === "video") {
+    resetGlitch()
     types.video = "Select Video"
     userVideo.muted = false
     userVideo.src = url
@@ -156,6 +158,9 @@ fileInput.addEventListener("change", (e) => {
       mediaSize.height = Math.floor(
         mediaSize.width * (userVideo.height / userVideo.width),
       )
+
+      userVideo.classList.remove("hidden")
+      defaultVideo.classList.add("hidden")
     })
 
     setTimeout(function () {
