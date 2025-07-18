@@ -10,30 +10,19 @@ const glitchDice = () => {
 }
 
 const glitchSize = () => {
-  return chance.weighted([1, 2, 3, 4, 6, 8], [1, 1, 1, 1, 1, 1])
+  return chance.weighted([1, 2, 3, 4, 6, 8, 10], [1, 1, 1, 1, 1, 1, 1])
 }
 
-const randomSpan = (max = 60, minGap = 10) => {
-  if (max < minGap) throw new Error("区间太小，无法满足最小间距")
+const randomSpan = (max = 60, min = 0) => {
+  if (max - min < 1) throw new Error("区间太小，无法取两个不同的数")
 
-  // 第一个随机整数
-  const a = chance.integer({ min: 0, max: max })
+  const a = chance.integer({ min, max })
+  let b
 
-  // 计算第二个数可选的区间（排除掉 [a - minGap + 1, a + minGap - 1]）
-  let validRanges = []
-
-  if (a - minGap >= 0) {
-    validRanges.push({ min: 0, max: a - minGap })
-  }
-  if (a + minGap <= max) {
-    validRanges.push({ min: a + minGap, max: max })
-  }
-
-  if (validRanges.length === 0) return randomSpan(max, minGap) // 重试
-
-  // 从合法区间中随机选一段，再随机一个整数
-  const range = chance.pickone(validRanges)
-  const b = chance.integer({ min: range.min, max: range.max })
+  // 生成直到不同为止
+  do {
+    b = chance.integer({ min, max })
+  } while (b === a)
 
   return [Math.min(a, b), Math.max(a, b)]
 }
