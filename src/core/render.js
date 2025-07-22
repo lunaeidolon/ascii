@@ -451,19 +451,26 @@ const refresh = () => {
   )
   pixelW = pixelSize
   pixelH = pixelSize * pixelRaito
-  numCols = Math.ceil(Math.ceil(mediaSize.width / pixelW) + 1)
+  numCols = Math.ceil(mediaSize.width / pixelW)
   numRows = Math.ceil(mediaSize.height / pixelH)
 
   const targetWidth = numCols * pixelW
-  const targetHeight = numRows * pixelH + 2
+  const targetHeight = numRows * pixelH
+  //  + 2
 
   console.log(targetWidth, targetHeight)
 
-  canvas.width = targetWidth * dpr
-  canvas.height = targetHeight * dpr
+  canvas.width = mediaSize.width * dpr
+  canvas.height = mediaSize.height * dpr
 
-  canvas.style.width = targetWidth + "px"
-  canvas.style.height = targetHeight + "px"
+  canvas.style.width = mediaSize.width + "px"
+  canvas.style.height = mediaSize.height + "px"
+
+  // canvas.width = targetWidth * dpr
+  // canvas.height = targetHeight * dpr
+
+  // canvas.style.width = targetWidth + "px"
+  // canvas.style.height = targetHeight + "px"
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 

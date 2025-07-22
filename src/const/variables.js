@@ -18,7 +18,7 @@ const objDefault = {
   randomness: 0,
   invert: false,
   animationType: "Random Text",
-  bratType: "glitch", // 'glitch'
+  bratType: "fill", // 'glitch'
   glitchRandom: 90,
   glitchMass: 30,
   glitchSizeMax: 8,

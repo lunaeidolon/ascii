@@ -41,11 +41,11 @@ const initGUI = () => {
     .add(obj, "bratType", { Fill: "fill", Glitch: "glitch", Test: "test" })
     .name("Animation Type")
     .onChange((value) => {
-      if (value === "glitch") {
-        glitchSize.show()
-      } else {
-        glitchSize.hide()
-      }
+      // if (value === "glitch") {
+      //   glitchSize.show()
+      // } else {
+      //   glitchSize.hide()
+      // }
     })
 
   const glitchRandom = gui
@@ -74,8 +74,8 @@ const initGUI = () => {
   //   .name("Glitch Min Length")
 
   if (obj.bratType !== "glitch") {
-    glitchSize.hide()
-    glitchLength.hide()
+    // glitchSize.hide()
+    // glitchLength.hide()
   }
 
   gui
