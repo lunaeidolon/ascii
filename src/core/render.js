@@ -367,7 +367,8 @@ const renderTree = () => {
 const renderBrat = () => {
   if (obj.ifBackground) {
     ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
+    // ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
   }
 
   const fontResizeFactor = 0
