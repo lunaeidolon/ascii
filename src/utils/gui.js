@@ -48,6 +48,14 @@ const initGUI = () => {
       // }
     })
 
+  gui
+    .add(obj, "bratSize", {
+      以视频尺寸为准: "video",
+      以图形展示完整为准: "shape",
+    })
+    .name("展示尺寸")
+    .onChange(refresh)
+
   const glitchRandom = gui
     .add(obj, "glitchRandom")
     .min(1)

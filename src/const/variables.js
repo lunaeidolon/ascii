@@ -19,6 +19,7 @@ const objDefault = {
   invert: false,
   animationType: "Random Text",
   bratType: "fill", // 'glitch'
+  bratSize: "video", // 'video' 'shape'
   glitchRandom: 90,
   glitchMass: 30,
   glitchSizeMax: 8,

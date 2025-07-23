@@ -451,7 +451,11 @@ const refresh = () => {
   )
   pixelW = pixelSize
   pixelH = pixelSize * pixelRaito
-  numCols = Math.ceil(mediaSize.width / pixelW)
+
+  numCols =
+    obj.bratSize === "video"
+      ? Math.ceil(mediaSize.width / pixelW)
+      : Math.ceil(Math.ceil(mediaSize.width / pixelW) + 1)
   numRows = Math.ceil(mediaSize.height / pixelH)
 
   const targetWidth = numCols * pixelW
@@ -460,17 +464,19 @@ const refresh = () => {
 
   console.log(targetWidth, targetHeight)
 
-  canvas.width = mediaSize.width * dpr
-  canvas.height = mediaSize.height * dpr
+  if (obj.bratSize === "video") {
+    canvas.width = mediaSize.width * dpr
+    canvas.height = mediaSize.height * dpr
 
-  canvas.style.width = mediaSize.width + "px"
-  canvas.style.height = mediaSize.height + "px"
+    canvas.style.width = mediaSize.width + "px"
+    canvas.style.height = mediaSize.height + "px"
+  } else {
+    canvas.width = targetWidth * dpr
+    canvas.height = targetHeight * dpr
 
-  // canvas.width = targetWidth * dpr
-  // canvas.height = targetHeight * dpr
-
-  // canvas.style.width = targetWidth + "px"
-  // canvas.style.height = targetHeight + "px"
+    canvas.style.width = targetWidth + "px"
+    canvas.style.height = targetHeight + "px"
+  }
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
