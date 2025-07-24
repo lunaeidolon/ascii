@@ -14,7 +14,7 @@ const record = {
   state: false,
   videoEncoder: null,
   frameNumber: 0,
-  videofps: 12,
+  videofps: 30,
 }
 
 function toggleVideoRecord() {
