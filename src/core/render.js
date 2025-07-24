@@ -434,7 +434,11 @@ const renderBrat = () => {
       //   col * pixelW + char.offset * fontResize - charOffset * fontResize,
       //   row * pixelH * 1.8 + pixelH,
       // )
-      ctx.fillText(char.c, col * pixelW, row * pixelH + pixelH)
+
+      const textYOffset =
+        obj.pixelSizeFactor < 20 ? -3.5 : obj.pixelSizeFactor < 51 ? -1 : 0
+
+      ctx.fillText(char.c, col * pixelW, (row + 1) * pixelH + textYOffset)
       nextChar()
       // charOffset += 0.2
     }
@@ -460,7 +464,7 @@ const refresh = () => {
   numRows = Math.ceil(mediaSize.height / pixelH)
 
   const targetWidth = numCols * pixelW
-  const targetHeight = numRows * pixelH
+  const targetHeight = numRows * pixelH + 1
   //  + 2
 
   console.log(targetWidth, targetHeight)

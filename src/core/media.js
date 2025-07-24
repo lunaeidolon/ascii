@@ -55,6 +55,8 @@ function startDefaultVideo() {
   defaultVideo.play()
   anime.playAnimationToggle = true
   anime.animationRequest = requestAnimationFrame(loop)
+
+  refresh()
 }
 
 function startWebcam() {
