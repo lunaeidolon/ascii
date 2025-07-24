@@ -147,7 +147,7 @@ fileInput.addEventListener("change", (e) => {
   if (type === "video") {
     resetGlitch()
     types.video = "Select Video"
-    userVideo.muted = false
+    // userVideo.muted = false
     userVideo.src = url
     userVideo.addEventListener("loadedmetadata", () => {
       userVideo.width = userVideo.videoWidth / 2
