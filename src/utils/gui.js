@@ -81,10 +81,10 @@ const initGUI = () => {
   //   .step(1)
   //   .name("Glitch Min Length")
 
-  if (obj.bratType !== "glitch") {
-    // glitchSize.hide()
-    // glitchLength.hide()
-  }
+  // if (obj.bratType !== "glitch") {
+  // glitchSize.hide()
+  // glitchLength.hide()
+  // }
 
   gui
     .add(obj, "offsetLength")
@@ -120,8 +120,8 @@ const initGUI = () => {
   //   .onChange(refresh)
   gui
     .add(obj, "pixelSizeFactor")
-    .min(10)
-    .max(200)
+    .min(obj.minPixelSizeFactor)
+    .max(201)
     .step(1)
     .name("Resolution")
     .onChange(refresh)

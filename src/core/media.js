@@ -1,8 +1,16 @@
-import { canvas, ctx, defaultVideo, dpr, imageEl } from "../const/dom"
+import {
+  canvas,
+  ctx,
+  defaultVideo,
+  dpr,
+  imageEl,
+  userVideo,
+} from "../const/dom"
 import { webcam, dVideo, mediaSize, types, anime } from "../const/variables"
 import { loop, refresh, renderBrat } from "./render"
 import { isIOS, isAndroid } from "../utils/broswer"
 import { resetGlitch } from "./renderGlitch"
+import { getMaxSize } from "./resize"
 
 function togglePausePlay() {
   if (anime.playAnimationToggle == false) {
@@ -156,10 +164,22 @@ fileInput.addEventListener("change", (e) => {
         "user video width/height: " + userVideo.width + ", " + userVideo.height,
       )
 
-      mediaSize.width = Math.min(userVideo.width, mediaSize.maxWidth)
-      mediaSize.height = Math.floor(
-        mediaSize.width * (userVideo.height / userVideo.width),
-      )
+      if (userVideo.width > userVideo.height) {
+        mediaSize.width = Math.min(userVideo.width, mediaSize.maxSize)
+        mediaSize.height = Math.floor(
+          mediaSize.width * (userVideo.height / userVideo.width),
+        )
+      } else {
+        mediaSize.height = Math.min(userVideo.height, mediaSize.maxSize)
+        mediaSize.width = Math.floor(
+          mediaSize.height * (userVideo.width / userVideo.height),
+        )
+      }
+
+      const maxSize = getMaxSize(mediaSize)
+
+      mediaSize.maxWidth = maxSize.maxWidth
+      mediaSize.maxHeight = maxSize.maxHeight
 
       userVideo.classList.remove("hidden")
       defaultVideo.classList.add("hidden")

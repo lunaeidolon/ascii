@@ -24,6 +24,7 @@ import {
 } from "../utils/color"
 
 import { record, renderCanvasToVideoFrameAndEncode } from "./record"
+import { getFullPixelSize } from "./resize"
 
 var pixelSize
 var pixelRaito = 1
@@ -31,6 +32,8 @@ var pixelW
 var pixelH
 var numCols
 var numRows
+var offsetW = 0
+var offsetH = 0
 var alpha = 1
 
 // var fontFamily = "Courier New"
@@ -53,7 +56,6 @@ var grayscaleDataArray = []
 var backgroundRGB = hexToRgb(obj.backgroundColor)
 var backgroundHue = getHueFromHex(obj.backgroundColor)
 
-var backgroundGradient = obj.backgroundGradient
 var fontHue = getHueFromHex(obj.fontColor)
 
 var threshold = obj.threshold / 100
@@ -200,7 +202,7 @@ const renderText = () => {
       if (counter % 8 == 0 && Math.random() < randomness * 0.002) {
         ctx.fillStyle = tweakHexColor(obj.backgroundColor, 100 * randomness)
         ctx.fillRect(col * pixelW, row * pixelH, pixelW, pixelH)
-      } else if (backgroundGradient) {
+      } else if (obj.backgroundGradient) {
         var currentBackgroundColor =
           "hsl(" +
           backgroundHue +
@@ -438,7 +440,11 @@ const renderBrat = () => {
       const textYOffset =
         obj.pixelSizeFactor < 20 ? -3.5 : obj.pixelSizeFactor < 51 ? -1 : 0
 
-      ctx.fillText(char.c, col * pixelW, (row + 1) * pixelH + textYOffset)
+      ctx.fillText(
+        char.c,
+        offsetW + col * pixelW,
+        offsetH + (row + 1) * pixelH + textYOffset,
+      )
       nextChar()
       // charOffset += 0.2
     }
@@ -446,41 +452,32 @@ const renderBrat = () => {
 }
 
 const refresh = () => {
-  console.log("refresh")
-  console.log(
-    "canvas width/height: " + mediaSize.width + ", " + mediaSize.height,
-  )
+  let targetWidth, targetHeight
+  ;({ pixelSize, pixelW, pixelH, numCols, numRows, targetWidth, targetHeight } =
+    getFullPixelSize(mediaSize, obj.pixelSizeFactor))
 
-  pixelSize = Math.ceil(
-    Math.min(mediaSize.width, mediaSize.height) / obj.pixelSizeFactor,
-  )
-  pixelW = pixelSize
-  pixelH = pixelSize * pixelRaito
-
-  numCols =
-    obj.bratSize === "video"
-      ? Math.ceil(mediaSize.width / pixelW)
-      : Math.ceil(Math.ceil(mediaSize.width / pixelW) + 1)
-  numRows = Math.ceil(mediaSize.height / pixelH)
-
-  const targetWidth = numCols * pixelW
-  const targetHeight = numRows * pixelH + 1
-  //  + 2
-
-  console.log(targetWidth, targetHeight)
+  console.log(pixelSize, pixelW, pixelH, numCols, numRows)
 
   if (obj.bratSize === "video") {
+    offsetW = 0
+    offsetH = 0
+
     canvas.width = mediaSize.width * dpr
     canvas.height = mediaSize.height * dpr
 
     canvas.style.width = mediaSize.width + "px"
     canvas.style.height = mediaSize.height + "px"
   } else {
-    canvas.width = targetWidth * dpr
-    canvas.height = targetHeight * dpr
+    offsetW = (mediaSize.maxWidth - targetWidth) / 2
+    offsetH = (mediaSize.maxHeight - targetHeight) / 2
 
-    canvas.style.width = targetWidth + "px"
-    canvas.style.height = targetHeight + "px"
+    console.log(offsetW, offsetH)
+
+    canvas.width = mediaSize.maxWidth * dpr
+    canvas.height = mediaSize.maxHeight * dpr
+
+    canvas.style.width = mediaSize.maxWidth + "px"
+    canvas.style.height = mediaSize.maxHeight + "px"
   }
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
@@ -493,21 +490,20 @@ const refresh = () => {
   backgroundRGB = hexToRgb(obj.backgroundColor)
   backgroundHue = getHueFromHex(obj.backgroundColor)
 
-  backgroundGradient = obj.backgroundGradient
-  threshold = obj.threshold / 100
-  counter = 0
-  randomness = obj.randomness / 100
-  randomColumnArray = []
-  startingRowArray = []
+  // threshold = obj.threshold / 100
+  // counter = 0
+  // randomness = obj.randomness / 100
+  // randomColumnArray = []
+  // startingRowArray = []
 
-  for (var i = 0; i < numCols; i++) {
-    if (Math.random() < randomness) {
-      randomColumnArray[i] = true
-      startingRowArray[i] = Math.floor(Math.random() * numRows)
-    } else {
-      randomColumnArray[i] = false
-    }
-  }
+  // for (var i = 0; i < numCols; i++) {
+  //   if (Math.random() < randomness) {
+  //     randomColumnArray[i] = true
+  //     startingRowArray[i] = Math.floor(Math.random() * numRows)
+  //   } else {
+  //     randomColumnArray[i] = false
+  //   }
+  // }
 
   if (types.video === "image") {
     anime.animationRequest = requestAnimationFrame(loop)

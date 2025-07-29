@@ -13,6 +13,7 @@ const objDefault = {
   fontColor2: "#0032ff",
   fontSizeFactor: 3,
   pixelSizeFactor: 70,
+  minPixelSizeFactor: 20,
   threshold: 30,
   textInput: "wavesand",
   randomness: 0,
@@ -60,7 +61,9 @@ const dVideo = {
 const mediaSize = {
   width: dVideo.width,
   height: dVideo.height,
-  maxWidth: 1080,
+  maxSize: 1080,
+  maxWidth: dVideo.width,
+  maxHeight: dVideo.height,
 }
 
 const types = {
