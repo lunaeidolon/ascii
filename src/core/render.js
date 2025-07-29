@@ -373,6 +373,20 @@ const renderBrat = () => {
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
   }
 
+  if (obj.pixelSizeFactor === 201) {
+    ctx.drawImage(
+      userVideo,
+      offsetW,
+      offsetH,
+      mediaSize.width,
+      mediaSize.height,
+    )
+
+    console.log("?")
+
+    return
+  }
+
   const fontResizeFactor = 0
   const fontResize = fontSize * (1 + fontResizeFactor)
 
@@ -456,8 +470,6 @@ const refresh = () => {
   ;({ pixelSize, pixelW, pixelH, numCols, numRows, targetWidth, targetHeight } =
     getFullPixelSize(mediaSize, obj.pixelSizeFactor))
 
-  console.log(pixelSize, pixelW, pixelH, numCols, numRows)
-
   if (obj.bratSize === "video") {
     offsetW = 0
     offsetH = 0
@@ -470,8 +482,6 @@ const refresh = () => {
   } else {
     offsetW = (mediaSize.maxWidth - targetWidth) / 2
     offsetH = (mediaSize.maxHeight - targetHeight) / 2
-
-    console.log(offsetW, offsetH)
 
     canvas.width = mediaSize.maxWidth * dpr
     canvas.height = mediaSize.maxHeight * dpr
