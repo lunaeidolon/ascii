@@ -1,11 +1,10 @@
 // import ndarray from "ndarray"
 import { imagePaths, imageCache } from "./bitmap"
 import { quadTreeFlat } from "../utils/quadtree"
-import { renderGlitch, renderTest } from "./renderGlitch"
+import { renderGlitch } from "./renderGlitch"
 
 import { obj, mediaSize, types, anime } from "../const/variables"
 import {
-  webcamVideo,
   userVideo,
   defaultVideo,
   imageEl,
@@ -29,50 +28,18 @@ import { getFullPixelSize } from "./resize"
 import { animePlay } from "./anime"
 
 var pixelSize
-var pixelRaito = 1
 var pixelW
 var pixelH
 var numCols
 var numRows
 var offsetW = 0
 var offsetH = 0
-var alpha = 1
 
 // var fontFamily = "Courier New"
 var fontFamily = "brat"
 var fontSize
-//this defines the character set. ordered by darker to lighter colour
-const gradient = "____``..--^^~~<>??123456789%%&&@@"
-const preparedGradient = gradient.replaceAll("_", "\u00A0")
-
-var randomColumnArray = []
-var startingRowArray = []
-
-var counter = 0
-var webcamStream
-
-//turn video input into still images, and then into pixelated grayscale values
 
 var grayscaleDataArray = []
-
-var backgroundRGB = hexToRgb(obj.backgroundColor)
-var backgroundHue = getHueFromHex(obj.backgroundColor)
-
-var fontHue = getHueFromHex(obj.fontColor)
-
-var threshold = obj.threshold / 100
-var randomness = obj.randomness / 100
-
-const getCharByScale = (scale) => {
-  const val = Math.floor((scale / 255) * (gradient.length - 1))
-  return preparedGradient[val]
-}
-
-// bitmap
-const getBitmapByScale = (scale) => {
-  const val = Math.floor((scale / 255) * (imageCache.length - 1))
-  return imageCache[val]
-}
 
 const render = (context) => {
   animePlay()
@@ -83,9 +50,6 @@ const render = (context) => {
     let source
 
     switch (types.video) {
-      case "Webcam":
-        source = webcamVideo
-        break
       case "Select Video":
         source = userVideo
         break
@@ -164,17 +128,6 @@ const render = (context) => {
         numCols,
         numRows,
       )
-    } else if (obj.bratType === "test") {
-      // re-draw
-      context.drawImage(source, 0, 0, mediaSize.width, mediaSize.height)
-      renderTest(
-        grayscaleDataArray,
-        pixelSize,
-        pixelW,
-        pixelH,
-        numCols,
-        numRows,
-      )
     }
   } else {
     context.fillStyle = "#fff"
@@ -183,191 +136,6 @@ const render = (context) => {
 }
 
 //draw the text and background color for each frame onto the final canvas
-const renderText = () => {
-  if (obj.ifBackground) {
-    ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
-  }
-
-  for (var col = 0; col < numCols; col++) {
-    for (var row = 0; row < numRows; row++) {
-      var adjustedThreshold =
-        threshold + 0.2 * Math.sin(counter / 30) * randomness
-      var currentGrayValue = grayscaleDataArray[row][col][0]
-
-      var char
-      var currentFontSize = Math.min(
-        fontSize * 3,
-        (fontSize * obj.fontSizeFactor) / 3,
-      )
-
-      //draw background color of pixels
-      if (counter % 8 == 0 && Math.random() < randomness * 0.002) {
-        ctx.fillStyle = tweakHexColor(obj.backgroundColor, 100 * randomness)
-        ctx.fillRect(col * pixelW, row * pixelH, pixelW, pixelH)
-      } else if (obj.backgroundGradient) {
-        var currentBackgroundColor =
-          "hsl(" +
-          backgroundHue +
-          "," +
-          obj.backgroundSaturation +
-          "%," +
-          Math.pow(currentGrayValue / 255, 2) * 100 +
-          "%)"
-        var currentBackgroundColorInvert =
-          "hsl(" +
-          backgroundHue +
-          "," +
-          obj.backgroundSaturation +
-          "%," +
-          (1 - Math.pow(currentGrayValue / 255, 2)) * 100 +
-          "%)"
-
-        if (obj.invertToggle == false) {
-          if (currentGrayValue / 255 > adjustedThreshold) {
-            ctx.fillStyle = currentBackgroundColor
-          } else {
-            ctx.fillStyle =
-              "hsl(" +
-              backgroundHue +
-              "," +
-              obj.backgroundSaturation +
-              "%," +
-              (adjustedThreshold / 4) * 100 +
-              "%)"
-          }
-        } else {
-          if (currentGrayValue / 255 < 1 - adjustedThreshold) {
-            ctx.fillStyle = currentBackgroundColorInvert
-          } else {
-            ctx.fillStyle =
-              "hsl(" +
-              backgroundHue +
-              "," +
-              obj.backgroundSaturation +
-              "%," +
-              (adjustedThreshold / 4) * 100 +
-              "%)"
-          }
-        }
-
-        ctx.fillRect(col * pixelW, row * pixelH, pixelW, pixelH)
-      } else {
-      }
-
-      //choose text character to draw
-      if (randomColumnArray[col]) {
-        if (
-          (((counter + startingRowArray[col]) % 100) / 100) * numRows +
-            startingRowArray[col] >
-          row
-        ) {
-          char = getCharByScale(currentGrayValue)
-        } else {
-          char = ""
-        }
-      } else if (Math.random() < 0.005 * randomness) {
-        char =
-          preparedGradient[Math.floor(Math.random() * preparedGradient.length)] //draw random char
-      } else if (obj.animationType == "Random Text") {
-        char = getCharByScale(currentGrayValue)
-      } else if (obj.animationType == "User Text") {
-        char = obj.textInput[(row * numCols + col) % obj.textInput.length]
-        if (obj.invertToggle) {
-          currentFontSize = Math.min(
-            fontSize * 3,
-            Math.floor(
-              (((1 - Math.pow(currentGrayValue / 255, 1)) *
-                obj.fontSizeFactor) /
-                3) *
-                fontSize,
-            ),
-          )
-        } else {
-          currentFontSize = Math.min(
-            fontSize * 3,
-            Math.floor(
-              ((Math.pow(currentGrayValue / 255, 1) * obj.fontSizeFactor) / 3) *
-                fontSize,
-            ),
-          )
-        }
-      }
-
-      //draw text onto canvas
-      ctx.font = currentFontSize + "px " + fontFamily
-
-      if (obj.invertToggle == false) {
-        if (currentGrayValue / 255 > adjustedThreshold) {
-          ctx.fillStyle = interpolateHex(
-            obj.fontColor,
-            obj.fontColor2,
-            (currentGrayValue / 255 - adjustedThreshold) /
-              (1 - adjustedThreshold),
-          )
-          ctx.fillText(char, col * pixelW, row * pixelH + pixelH)
-        }
-      } else {
-        if (currentGrayValue / 255 < 1 - adjustedThreshold) {
-          ctx.fillStyle = interpolateHex(
-            obj.fontColor2,
-            obj.fontColor,
-            currentGrayValue / 255 / (1 - adjustedThreshold),
-          )
-          ctx.fillText(char, col * pixelW, row * pixelH + pixelH)
-        }
-      }
-    }
-  }
-}
-
-const renderSVG = () => {
-  if (obj.ifBackground) {
-    ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
-  }
-
-  for (var col = 0; col < numCols; col++) {
-    for (var row = 0; row < numRows; row++) {
-      var adjustedThreshold =
-        threshold + 0.2 * Math.sin(counter / 30) * randomness
-      var currentGrayValue = grayscaleDataArray[row][col][0]
-      var bitmap = getBitmapByScale(currentGrayValue)
-
-      ctx.drawImage(
-        bitmap.offscreenCanvas,
-        col * pixelW,
-        row * pixelH,
-        pixelW,
-        pixelH,
-      )
-    }
-  }
-}
-
-const renderTree = () => {
-  if (obj.ifBackground) {
-    ctx.fillStyle = obj.backgroundColor
-    ctx.fillRect(0, 0, mediaSize.width, mediaSize.height)
-  }
-
-  const arr = quadTreeFlat(grayscaleDataArray)
-
-  for (let i = 0; i < arr.length; i++) {
-    const blk = arr[i]
-    var bitmap = getBitmapByScale(blk.value)
-
-    if (bitmap) {
-      ctx.drawImage(
-        bitmap.offscreenCanvas,
-        blk.x * pixelW,
-        blk.y * pixelH,
-        blk.w * pixelW,
-        blk.h * pixelH,
-      )
-    }
-  }
-}
 
 const renderBrat = () => {
   if (obj.ifBackground) {
@@ -377,8 +145,9 @@ const renderBrat = () => {
   }
 
   if (obj.pixelSizeFactor === 201) {
+    // 这里有问题
     ctx.drawImage(
-      userVideo,
+      defaultVideo,
       offsetW,
       offsetH,
       mediaSize.width,
@@ -391,12 +160,6 @@ const renderBrat = () => {
   const fontResizeFactor = 0
   const fontResize = fontSize * (1 + fontResizeFactor)
 
-  // const chars = [
-  //   { c: "B", offset: 0, offsetA: 0 },
-  //   { c: "R", offset: 0, offsetA: fontResizeFactor },
-  //   { c: "A", offset: -0.5, offsetA: fontResizeFactor * 2 - 1.5 },
-  //   { c: "T", offset: -1, offsetA: fontResizeFactor * 3 - 2 },
-  // ]
   const charsA = [
     { c: "1", o: false },
     { c: "2", o: true },
@@ -496,26 +259,6 @@ const refresh = (pixelSizeFactor) => {
   fontSize = pixelSize
   ctx.font = fontSize + "px " + fontFamily
 
-  // fontHue = getHueFromHex(obj.fontColor)
-
-  // backgroundRGB = hexToRgb(obj.backgroundColor)
-  // backgroundHue = getHueFromHex(obj.backgroundColor)
-
-  // threshold = obj.threshold / 100
-  // counter = 0
-  // randomness = obj.randomness / 100
-  // randomColumnArray = []
-  // startingRowArray = []
-
-  // for (var i = 0; i < numCols; i++) {
-  //   if (Math.random() < randomness) {
-  //     randomColumnArray[i] = true
-  //     startingRowArray[i] = Math.floor(Math.random() * numRows)
-  //   } else {
-  //     randomColumnArray[i] = false
-  //   }
-  // }
-
   if (types.video === "image") {
     anime.animationRequest = requestAnimationFrame(loop)
   }
@@ -524,11 +267,7 @@ const refresh = (pixelSizeFactor) => {
 
 //animation loop to go frame by frame
 function loop() {
-  if (counter == 0) {
-    console.log("start animation, first frame")
-  }
   if (anime.playAnimationToggle) {
-    counter++
     render(ctx)
 
     if (types.video !== "image") {
@@ -547,4 +286,4 @@ function loop() {
   }
 }
 
-export { render, renderText, renderBrat, refresh, loop }
+export { render, renderBrat, refresh, loop }

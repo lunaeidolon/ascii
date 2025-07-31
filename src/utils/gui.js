@@ -2,14 +2,8 @@ import GUI from "lil-gui"
 
 import { obj, types } from "../const/variables"
 import { refresh } from "../core/render"
-import {
-  togglePausePlay,
-  changeVideoType,
-  startDefaultVideo,
-  startWebcam,
-  stopVideo,
-} from "../core/media"
-import { record, toggleVideoRecord } from "../core/record"
+import { togglePausePlay } from "../core/media"
+import { toggleVideoRecord } from "../core/record"
 
 import { animePlay } from "../core/anime"
 import ease from "./ease"
@@ -24,34 +18,14 @@ const initGUI = () => {
     selectVideo()
   }
   gui.add(obj, "selectVideo").name("Upload Media")
-
-  obj["useWebcam"] = function () {
-    types.video = "Webcam"
-    changeVideoType()
-  }
-  // gui.add(obj, "useWebcam").name("Use Webcam")
-
   gui.add(obj, "ifBackground").name("Background").onFinishChange(refresh)
-
   gui
     .addColor(obj, "backgroundColor")
     .name("Background Color")
     .onFinishChange(refresh)
-  // gui.add(obj, "backgroundGradient").name("Bg Gradient?").onChange(refresh)
-  // gui
-  //   .addColor(obj, "offset")
-  //   .name("Offset")
-  //   .onFinishChange(refresh)
-  const bratType = gui
-    .add(obj, "bratType", { Fill: "fill", Glitch: "glitch", Test: "test" })
+  gui
+    .add(obj, "bratType", { Fill: "fill", Glitch: "glitch" })
     .name("Animation Type")
-    .onChange((value) => {
-      // if (value === "glitch") {
-      //   glitchSize.show()
-      // } else {
-      //   glitchSize.hide()
-      // }
-    })
 
   gui
     .add(obj, "bratSize", {
@@ -60,37 +34,7 @@ const initGUI = () => {
     })
     .name("展示尺寸")
     .onChange(refresh)
-
-  const glitchRandom = gui
-    .add(obj, "glitchRandom")
-    .min(1)
-    .max(100)
-    .step(1)
-    .name("Glitch Random")
-  // const glitchMass = gui
-  //   .add(obj, "glitchMass")
-  //   .min(1)
-  //   .max(100)
-  //   .step(1)
-  //   .name("Glitch Mass")
-  // const glitchSize = gui
-  //   .add(obj, "glitchSizeMax")
-  //   .min(1)
-  //   .max(10)
-  //   .step(1)
-  //   .name("Glitch Max Size")
-  // const glitchLength = gui
-  //   .add(obj, "glitchSizeMax")
-  //   .min(1)
-  //   .max(10)
-  //   .step(1)
-  //   .name("Glitch Min Length")
-
-  // if (obj.bratType !== "glitch") {
-  // glitchSize.hide()
-  // glitchLength.hide()
-  // }
-
+  gui.add(obj, "glitchRandom").min(1).max(100).step(1).name("Glitch Random")
   gui
     .add(obj, "offsetLength")
     .min(0)
@@ -106,23 +50,6 @@ const initGUI = () => {
     .step(1)
     .name("Opacity")
     .onChange(refresh)
-  // gui
-  //   .add(obj, "backgroundSaturation")
-  //   .min(0)
-  //   .max(100)
-  //   .step(1)
-  //   .name("Bg Saturation")
-  //   .onChange(refresh)
-  // gui.addColor(obj, "fontColor").name("Font Color").onFinishChange(refresh)
-  // gui.addColor(obj, "fontColor2").name("Font Color2").onFinishChange(refresh)
-
-  // gui
-  //   .add(obj, "fontSizeFactor")
-  //   .min(0)
-  //   .max(10)
-  //   .step(1)
-  //   .name("Font Size Factor")
-  //   .onChange(refresh)
   guiControllers.pixelSizeFactor = gui
     .add(obj, "pixelSizeFactor")
     .min(obj.minPixelSizeFactor)
@@ -130,27 +57,6 @@ const initGUI = () => {
     .step(1)
     .name("Resolution")
     .onChange(refresh)
-  // gui
-  //   .add(obj, "threshold")
-  //   .min(0)
-  //   .max(95)
-  //   .step(1)
-  //   .name("Threshold")
-  //   .onChange(refresh)
-  // gui.add(obj, "invert").name("Invert?").onChange(refresh)
-  // gui
-  //   .add(obj, "randomness")
-  //   .min(0)
-  //   .max(100)
-  //   .step(1)
-  //   .name("Randomness")
-  //   .onChange(refresh)
-
-  // gui
-  //   .add(obj, "animationType", ["Random Text", "User Text"])
-  //   .name("Text Type")
-  //   .onChange(refresh)
-  // gui.add(obj, "textInput").onFinishChange(refresh)
 
   const autoAnime = gui.addFolder("Auto Anime")
   autoAnime
@@ -183,16 +89,9 @@ const initGUI = () => {
 
   let customContainer = document.getElementById("gui")
   customContainer.appendChild(gui.domElement)
-
-  var useWebcamButton = document.getElementById("useWebcamButton")
-  useWebcamButton.addEventListener("click", function () {
-    types.video = "Webcam"
-    changeVideoType()
-  })
 }
 
 function selectVideo() {
-  types.video = "Select Video"
   fileInput.click()
 }
 
