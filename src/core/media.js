@@ -11,6 +11,7 @@ import { loop, refresh, renderBrat } from "./render"
 import { isIOS, isAndroid } from "../utils/broswer"
 import { resetGlitch } from "./renderGlitch"
 import { getMaxSize } from "./resize"
+import { animePixelSize } from "./anime"
 
 function togglePausePlay() {
   if (anime.playAnimationToggle == false) {
@@ -60,6 +61,7 @@ function startDefaultVideo() {
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
 
+  animePixelSize()
   defaultVideo.play()
   anime.playAnimationToggle = true
   anime.animationRequest = requestAnimationFrame(loop)
@@ -186,6 +188,7 @@ fileInput.addEventListener("change", (e) => {
     })
 
     setTimeout(function () {
+      animePixelSize()
       userVideo.play()
       refresh()
       anime.playAnimationToggle = true

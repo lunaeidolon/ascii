@@ -11,8 +11,13 @@ import {
 } from "../core/media"
 import { record, toggleVideoRecord } from "../core/record"
 
+import { animePlay } from "../core/anime"
+import ease from "./ease"
+
+const gui = new GUI()
+const guiControllers = { pixelSizeFactor: null }
+
 const initGUI = () => {
-  const gui = new GUI()
   // gui.close()
 
   obj["selectVideo"] = function () {
@@ -118,7 +123,7 @@ const initGUI = () => {
   //   .step(1)
   //   .name("Font Size Factor")
   //   .onChange(refresh)
-  gui
+  guiControllers.pixelSizeFactor = gui
     .add(obj, "pixelSizeFactor")
     .min(obj.minPixelSizeFactor)
     .max(201)
@@ -146,6 +151,20 @@ const initGUI = () => {
   //   .name("Text Type")
   //   .onChange(refresh)
   // gui.add(obj, "textInput").onFinishChange(refresh)
+
+  const autoAnime = gui.addFolder("Auto Anime")
+  autoAnime
+    .add(obj, "animeDuration")
+    .min(0)
+    .max(10)
+    .step(1)
+    .name("Duration in ms")
+  autoAnime.add(obj, "animeEase", ease)
+  autoAnime.add(obj, "animeDuringRecord").name("Auto anime during record")
+  obj.autoAnimePlay = () => {
+    animePlay()
+  }
+  autoAnime.add(obj, "autoAnimePlay").name("Test Anime Play")
 
   obj["saveImage"] = function () {
     saveImage()
@@ -187,4 +206,4 @@ function saveImage() {
   link.click()
 }
 
-export { initGUI }
+export { gui, guiControllers, initGUI }

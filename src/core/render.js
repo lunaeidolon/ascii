@@ -26,6 +26,8 @@ import {
 import { record, renderCanvasToVideoFrameAndEncode } from "./record"
 import { getFullPixelSize } from "./resize"
 
+import { animePlay } from "./anime"
+
 var pixelSize
 var pixelRaito = 1
 var pixelW
@@ -73,6 +75,7 @@ const getBitmapByScale = (scale) => {
 }
 
 const render = (context) => {
+  animePlay()
   if (mediaSize.width && mediaSize.height) {
     canvasRaw.width = mediaSize.width
     canvasRaw.height = mediaSize.height
@@ -382,8 +385,6 @@ const renderBrat = () => {
       mediaSize.height,
     )
 
-    console.log("?")
-
     return
   }
 
@@ -465,10 +466,10 @@ const renderBrat = () => {
   }
 }
 
-const refresh = () => {
+const refresh = (pixelSizeFactor) => {
   let targetWidth, targetHeight
   ;({ pixelSize, pixelW, pixelH, numCols, numRows, targetWidth, targetHeight } =
-    getFullPixelSize(mediaSize, obj.pixelSizeFactor))
+    getFullPixelSize(mediaSize, pixelSizeFactor || obj.pixelSizeFactor))
 
   if (obj.bratSize === "video") {
     offsetW = 0
@@ -495,10 +496,10 @@ const refresh = () => {
   fontSize = pixelSize
   ctx.font = fontSize + "px " + fontFamily
 
-  fontHue = getHueFromHex(obj.fontColor)
+  // fontHue = getHueFromHex(obj.fontColor)
 
-  backgroundRGB = hexToRgb(obj.backgroundColor)
-  backgroundHue = getHueFromHex(obj.backgroundColor)
+  // backgroundRGB = hexToRgb(obj.backgroundColor)
+  // backgroundHue = getHueFromHex(obj.backgroundColor)
 
   // threshold = obj.threshold / 100
   // counter = 0

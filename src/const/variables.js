@@ -25,6 +25,11 @@ const objDefault = {
   glitchMass: 30,
   glitchSizeMax: 8,
   glitchLengthMin: 1,
+
+  animeDuration: 3,
+  animeEase: "inExpo",
+  animeDuringRecord: true,
+  customEase: "",
 }
 
 // const localObj = localStorage.getItem("bart")
