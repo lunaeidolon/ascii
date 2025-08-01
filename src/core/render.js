@@ -147,7 +147,7 @@ const renderBrat = () => {
   if (obj.pixelSizeFactor === 201) {
     // 这里有问题
     ctx.drawImage(
-      defaultVideo,
+      types.video === "Select Video" ? userVideo : defaultVideo,
       offsetW,
       offsetH,
       mediaSize.width,
