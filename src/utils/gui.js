@@ -18,38 +18,23 @@ const initGUI = () => {
     selectVideo()
   }
   gui.add(obj, "selectVideo").name("Upload Media")
-  gui.add(obj, "ifBackground").name("Background").onFinishChange(refresh)
-  gui
-    .addColor(obj, "backgroundColor")
-    .name("Background Color")
-    .onFinishChange(refresh)
-  gui
-    .add(obj, "bratType", { Fill: "fill", Glitch: "glitch" })
-    .name("Animation Type")
+  // gui.add(obj, "ifBackground").name("Background").onFinishChange()
+  gui.addColor(obj, "backgroundColor").name("Background Color").onFinishChange()
+  // gui
+  //   .add(obj, "bratType", { Fill: "fill", Glitch: "glitch" })
+  //   .name("Animation Type")
 
-  gui
-    .add(obj, "bratSize", {
-      以视频尺寸为准: "video",
-      以图形展示完整为准: "shape",
-    })
-    .name("展示尺寸")
-    .onChange(refresh)
-  gui.add(obj, "glitchRandom").min(1).max(100).step(1).name("Glitch Random")
-  gui
-    .add(obj, "offsetLength")
-    .min(0)
-    .max(6)
-    .step(1)
-    .name("Offset")
-    .onChange(refresh)
+  // gui
+  //   .add(obj, "bratSize", {
+  //     以视频尺寸为准: "video",
+  //     以图形展示完整为准: "shape",
+  //   })
+  //   .name("展示尺寸")
+  //   .onChange()
+  // gui.add(obj, "glitchRandom").min(1).max(100).step(1).name("Glitch Random")
+  gui.add(obj, "offsetLength").min(0).max(6).step(1).name("Offset").onChange()
 
-  gui
-    .add(obj, "opacity")
-    .min(0)
-    .max(100)
-    .step(1)
-    .name("Opacity")
-    .onChange(refresh)
+  gui.add(obj, "opacity").min(0).max(100).step(1).name("Opacity").onChange()
   guiControllers.pixelSizeFactor = gui
     .add(obj, "pixelSizeFactor")
     .min(obj.minPixelSizeFactor)
