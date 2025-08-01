@@ -24,13 +24,13 @@ const initGUI = () => {
   //   .add(obj, "bratType", { Fill: "fill", Glitch: "glitch" })
   //   .name("Animation Type")
 
-  // gui
-  //   .add(obj, "bratSize", {
-  //     以视频尺寸为准: "video",
-  //     以图形展示完整为准: "shape",
-  //   })
-  //   .name("展示尺寸")
-  //   .onChange()
+  gui
+    .add(obj, "bratSize", {
+      以视频尺寸为准: "video",
+      以图形展示完整为准: "shape",
+    })
+    .name("展示尺寸")
+    .onChange(refresh)
   // gui.add(obj, "glitchRandom").min(1).max(100).step(1).name("Glitch Random")
   gui.add(obj, "offsetLength").min(0).max(6).step(1).name("Offset").onChange()
 

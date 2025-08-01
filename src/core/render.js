@@ -229,14 +229,14 @@ const renderBrat = () => {
   }
 }
 
-const refresh = (pixelSizeFactor) => {
+const refresh = () => {
   let targetWidth, targetHeight
   ;({ pixelSize, pixelW, pixelH, numCols, numRows, targetWidth, targetHeight } =
-    getFullPixelSize(mediaSize, pixelSizeFactor || obj.pixelSizeFactor))
+    getFullPixelSize(mediaSize, obj.pixelSizeFactor))
 
   if (obj.bratSize === "video") {
-    offsetW = 0
-    offsetH = 0
+    offsetW = (mediaSize.width - targetWidth) / 2
+    offsetH = (mediaSize.height - targetHeight) / 2
 
     canvas.width = mediaSize.width * dpr
     canvas.height = mediaSize.height * dpr
