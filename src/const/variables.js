@@ -13,7 +13,7 @@ const objDefault = {
   fontColor2: "#0032ff",
   fontSizeFactor: 3,
   pixelSizeFactor: 70,
-  minPixelSizeFactor: 20,
+  minPixelSizeFactor: 2,
   threshold: 30,
   textInput: "wavesand",
   randomness: 0,

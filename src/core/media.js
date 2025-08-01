@@ -61,7 +61,7 @@ function startDefaultVideo() {
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0) // 设置缩放
 
-  animePixelSize()
+  // animePixelSize()
   defaultVideo.play()
   anime.playAnimationToggle = true
   anime.animationRequest = requestAnimationFrame(loop)
@@ -181,14 +181,14 @@ fileInput.addEventListener("change", (e) => {
       const maxSize = getMaxSize(mediaSize)
 
       mediaSize.maxWidth = maxSize.maxWidth
-      mediaSize.maxHeight = maxSize.maxHeight
+      mediaSize.maxHeight = maxSize.maxHeight * 1.05
 
       userVideo.classList.remove("hidden")
       defaultVideo.classList.add("hidden")
     })
 
     setTimeout(function () {
-      animePixelSize()
+      // animePixelSize()
       userVideo.play()
       refresh()
       anime.playAnimationToggle = true

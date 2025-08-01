@@ -58,19 +58,19 @@ const initGUI = () => {
     .name("Resolution")
     .onChange(refresh)
 
-  const autoAnime = gui.addFolder("Auto Anime")
-  autoAnime
-    .add(obj, "animeDuration")
-    .min(0)
-    .max(10)
-    .step(1)
-    .name("Duration in ms")
-  autoAnime.add(obj, "animeEase", ease)
-  autoAnime.add(obj, "animeDuringRecord").name("Auto anime during record")
-  obj.autoAnimePlay = () => {
-    animePlay()
-  }
-  autoAnime.add(obj, "autoAnimePlay").name("Test Anime Play")
+  // const autoAnime = gui.addFolder("Auto Anime")
+  // autoAnime
+  //   .add(obj, "animeDuration")
+  //   .min(0)
+  //   .max(10)
+  //   .step(1)
+  //   .name("Duration in ms")
+  // autoAnime.add(obj, "animeEase", ease)
+  // autoAnime.add(obj, "animeDuringRecord").name("Auto anime during record")
+  // obj.autoAnimePlay = () => {
+  //   animePlay()
+  // }
+  // autoAnime.add(obj, "autoAnimePlay").name("Test Anime Play")
 
   obj["saveImage"] = function () {
     saveImage()
