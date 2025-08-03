@@ -3,7 +3,7 @@ let obj
 const objDefault = {
   ifBackground: true,
   // backgroundColor: "#080c37",
-  backgroundColor: "#ffffff",
+  backgroundColor: "#000000",
   backgroundGradient: true,
   // backgroundSaturation: 60,
   backgroundSaturation: 0,
