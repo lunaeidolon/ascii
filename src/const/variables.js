@@ -12,14 +12,14 @@ const objDefault = {
   fontColor: "#c7205b",
   fontColor2: "#0032ff",
   fontSizeFactor: 3,
-  pixelSizeFactor: 70,
+  pixelSizeFactor: 15,
   minPixelSizeFactor: 2,
   threshold: 30,
   textInput: "wavesand",
   randomness: 0,
   invert: false,
   animationType: "Random Text",
-  bratType: "fill", // 'glitch'
+  bratType: "fillglitch", // 'fill' 'glitch'
   bratSize: "shape", // 'video' 'shape'
   glitchRandom: 90,
   glitchMass: 30,
@@ -30,6 +30,9 @@ const objDefault = {
   animeEase: "inExpo",
   animeDuringRecord: true,
   customEase: "",
+
+  fillGlitchSeed: 10,
+  fillGlitchSize: 6,
 }
 
 // const localObj = localStorage.getItem("bart")

@@ -20,9 +20,6 @@ const initGUI = () => {
   gui.add(obj, "selectVideo").name("Upload Media")
   // gui.add(obj, "ifBackground").name("Background").onFinishChange()
   gui.addColor(obj, "backgroundColor").name("Background Color").onFinishChange()
-  // gui
-  //   .add(obj, "bratType", { Fill: "fill", Glitch: "glitch" })
-  //   .name("Animation Type")
 
   gui
     .add(obj, "bratSize", {
@@ -31,6 +28,11 @@ const initGUI = () => {
     })
     .name("展示尺寸")
     .onChange(refresh)
+
+  gui
+    .add(obj, "bratType", { Fill: "fill", Glitch: "fillglitch" })
+    .name("Animation Type")
+
   // gui.add(obj, "glitchRandom").min(1).max(100).step(1).name("Glitch Random")
   gui.add(obj, "offsetLength").min(0).max(6).step(1).name("Offset").onChange()
 
@@ -41,6 +43,23 @@ const initGUI = () => {
     .max(201)
     .step(1)
     .name("Resolution")
+    .onChange(refresh)
+
+  const fillGlitchGroup = gui.addFolder("Glitch Options")
+  fillGlitchGroup
+    .add(obj, "fillGlitchSeed")
+    .min(1)
+    .max(100)
+    .step(1)
+    .name("Seed")
+    .onChange(refresh)
+
+  fillGlitchGroup
+    .add(obj, "fillGlitchSize")
+    .min(1)
+    .max(100)
+    .step(1)
+    .name("Size")
     .onChange(refresh)
 
   // const autoAnime = gui.addFolder("Auto Anime")

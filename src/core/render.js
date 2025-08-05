@@ -2,6 +2,7 @@
 import { imagePaths, imageCache } from "./bitmap"
 import { quadTreeFlat } from "../utils/quadtree"
 import { renderGlitch } from "./renderGlitch"
+import { getRandomSeeds, renderFillGlitch } from "./renderFillGlitch"
 
 import { obj, mediaSize, types, anime } from "../const/variables"
 import {
@@ -26,6 +27,9 @@ import { record, renderCanvasToVideoFrameAndEncode } from "./record"
 import { getFullPixelSize } from "./resize"
 
 import { animePlay } from "./anime"
+import Chance from "chance"
+
+const chance = new Chance()
 
 var pixelSize
 var pixelW
@@ -40,6 +44,7 @@ var fontFamily = "brat"
 var fontSize
 
 var grayscaleDataArray = []
+var opacityArray = []
 
 const render = (context) => {
   animePlay()
@@ -84,6 +89,9 @@ const render = (context) => {
 
     for (var cellY = 0; cellY < numRows; cellY++) {
       grayscaleDataArray[cellY] = []
+      if (!opacityArray[cellY]) {
+        opacityArray[cellY] = []
+      }
 
       for (var cellX = 0; cellX < numCols; cellX++) {
         var cellPixels = []
@@ -112,6 +120,17 @@ const render = (context) => {
         var grayScaleValue =
           0.299 * avgColor[0] + 0.587 * avgColor[1] + 0.114 * avgColor[2] //perceived luminosity value
         grayscaleDataArray[cellY][cellX] = [grayScaleValue, avgColor]
+        if (!opacityArray[cellY][cellX]) {
+          opacityArray[cellY][cellX] = {
+            seed:
+              chance.floating({ min: 0, max: 1 }) < obj.fillGlitchSeed / 1000,
+            show: chance.floating({ min: 0, max: 1 }),
+          }
+
+          if (opacityArray[cellY][cellX].seed) {
+            console.log(opacityArray[cellY][cellX])
+          }
+        }
       }
     }
 
@@ -128,6 +147,20 @@ const render = (context) => {
         numCols,
         numRows,
       )
+    } else if (obj.bratType === "fillglitch") {
+      context.drawImage(source, 0, 0, mediaSize.width, mediaSize.height)
+      renderFillGlitch({
+        fontSize,
+        numRows,
+        numCols,
+        grayscaleDataArray,
+        opacityArray,
+        fontFamily,
+        offsetW,
+        offsetH,
+        pixelW,
+        pixelH,
+      })
     }
   } else {
     context.fillStyle = "#fff"
@@ -145,7 +178,6 @@ const renderBrat = () => {
   }
 
   if (obj.pixelSizeFactor === 201) {
-    // 这里有问题
     ctx.drawImage(
       types.video === "Select Video" ? userVideo : defaultVideo,
       offsetW,
@@ -263,6 +295,10 @@ const refresh = () => {
     anime.animationRequest = requestAnimationFrame(loop)
   }
   // localStorage.setItem("brat", JSON.stringify(obj))
+
+  if (obj.bratType === "fillglitch") {
+    getRandomSeeds(numCols, numRows)
+  }
 }
 
 //animation loop to go frame by frame
