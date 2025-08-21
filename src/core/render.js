@@ -122,13 +122,7 @@ const render = (context) => {
         grayscaleDataArray[cellY][cellX] = [grayScaleValue, avgColor]
         if (!opacityArray[cellY][cellX]) {
           opacityArray[cellY][cellX] = {
-            seed:
-              chance.floating({ min: 0, max: 1 }) < obj.fillGlitchSeed / 1000,
             show: chance.floating({ min: 0, max: 1 }),
-          }
-
-          if (opacityArray[cellY][cellX].seed) {
-            console.log(opacityArray[cellY][cellX])
           }
         }
       }
@@ -189,9 +183,6 @@ const renderBrat = () => {
     return
   }
 
-  const fontResizeFactor = 0
-  const fontResize = fontSize * (1 + fontResizeFactor)
-
   const charsA = [
     { c: "1", o: false },
     { c: "2", o: true },
@@ -240,20 +231,17 @@ const renderBrat = () => {
       ctx.fillStyle = `rgba(${color[0].toFixed(0)}, ${color[1].toFixed(
         0,
       )}, ${color[2].toFixed(0)}, ${char.o ? obj.opacity / 100 : 1})`
-      ctx.font = fontResize + "px " + fontFamily
+      ctx.font = fontSize + "px " + fontFamily
       // ctx.fillText(
       //   char.c,
       //   col * pixelW + char.offset * fontResize - charOffset * fontResize,
       //   row * pixelH * 1.8 + pixelH,
       // )
 
-      const textYOffset =
-        obj.pixelSizeFactor < 20 ? -3.5 : obj.pixelSizeFactor < 51 ? -1 : 0
-
       ctx.fillText(
         char.c,
-        offsetW + col * pixelW,
-        offsetH + (row + 1) * pixelH + textYOffset,
+        offsetW + col * pixelW + obj.fontOffset[0],
+        offsetH + (row + 1) * pixelH + obj.fontOffset[1],
       )
       nextChar()
       // charOffset += 0.2
@@ -265,6 +253,19 @@ const refresh = () => {
   let targetWidth, targetHeight
   ;({ pixelSize, pixelW, pixelH, numCols, numRows, targetWidth, targetHeight } =
     getFullPixelSize(mediaSize, obj.pixelSizeFactor))
+
+  ctx.font = pixelSize + "px brat"
+  const metrics = ctx.measureText("1")
+
+  obj.mesureFontSize = [
+    metrics.width,
+    metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent,
+  ]
+  obj.fontOffset = [
+    pixelSize - obj.mesureFontSize[0],
+    pixelSize - obj.mesureFontSize[1],
+  ]
+  // console.log(JSON.stringify(obj.fontOffset))
 
   if (obj.bratSize === "video") {
     offsetW = (mediaSize.width - targetWidth) / 2

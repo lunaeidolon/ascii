@@ -12,7 +12,7 @@ const objDefault = {
   fontColor: "#c7205b",
   fontColor2: "#0032ff",
   fontSizeFactor: 3,
-  pixelSizeFactor: 15,
+  pixelSizeFactor: 30,
   minPixelSizeFactor: 2,
   threshold: 30,
   textInput: "wavesand",
@@ -31,8 +31,12 @@ const objDefault = {
   animeDuringRecord: true,
   customEase: "",
 
-  fillGlitchSeed: 10,
-  fillGlitchSize: 6,
+  fillGlitchBgColor: false,
+  fillGlitchNoiseChance: 1,
+  fillGlitchThreshold: 0.85,
+
+  mesureFontSize: 1,
+  fontOffset: 0,
 }
 
 // const localObj = localStorage.getItem("bart")

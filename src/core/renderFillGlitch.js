@@ -104,7 +104,7 @@ const renderFillGlitch = ({
 
     for (var col = 0; col < numCols; col++) {
       const opacity = opacityArray[row][col]
-      if (opacity.show > 0.6) {
+      if (opacity.show > obj.fillGlitchThreshold) {
         if (col === 0) {
           charIndex = rowOdd ? 0 : obj.offsetLength
           charOffset = 0
@@ -118,21 +118,58 @@ const renderFillGlitch = ({
           obj.pixelSizeFactor < 20 ? -3.5 : obj.pixelSizeFactor < 51 ? -1 : 0
 
         const x = offsetW + col * pixelW
-        const y = offsetH + (row + 1) * pixelH
+        const y = offsetH + row * pixelH
 
         if (obj.ifBackground) {
-          ctx.fillStyle = obj.backgroundColor
-          ctx.fillRect(x, y - pixelH, pixelW, pixelH)
+          if (obj.fillGlitchBgColor) {
+            ctx.fillStyle = `rgba(${color[0].toFixed(0)}, ${color[1].toFixed(
+              0,
+            )}, ${color[2].toFixed(0)}, ${opacity.show / 2})`
+          } else {
+            ctx.fillStyle = obj.backgroundColor
+          }
+
+          const offsetX =
+            obj.fontOffset[0] > 0 ? obj.fontOffset[0] : obj.fontOffset[1] * 0.3
+          const offsetY = obj.fontOffset[1] * 0.3
+
+          ctx.fillRect(
+            x - offsetX,
+            y - offsetY,
+            pixelW + offsetX * 2,
+            pixelH + offsetY * 2,
+          )
         }
 
-        ctx.fillStyle = `rgba(${color[0].toFixed(0)}, ${color[1].toFixed(
-          0,
-        )}, ${color[2].toFixed(0)}, ${opacity.show})`
+        // Text Noise Color
+        if (chance.bool({ likelihood: obj.fillGlitchNoiseChance })) {
+          const theCol = Math.min(
+            Math.max(chance.integer({ min: -5, max: 5 }) + col, 0),
+            numCols - 1,
+          )
+          const theRow = Math.min(
+            Math.max(chance.integer({ min: -5, max: 5 }) + row, 0),
+            numRows - 1,
+          )
+          const targetColor = grayscaleDataArray[theRow][theCol][1]
+          ctx.fillStyle = `rgba(${targetColor[0].toFixed(
+            0,
+          )}, ${targetColor[1].toFixed(0)}, ${targetColor[2].toFixed(0)}, ${
+            opacity.show
+          })`
+        } else {
+          ctx.fillStyle = `rgba(${color[0].toFixed(0)}, ${color[1].toFixed(
+            0,
+          )}, ${color[2].toFixed(0)}, ${opacity.show})`
+        }
         ctx.font = fontResize + "px " + fontFamily
-        ctx.fillText(char.c, offsetW + col * pixelW, y)
+        ctx.fillText(
+          char.c,
+          x - obj.fontOffset[0],
+          y + pixelH - obj.fontOffset[1] * 1.3,
+        )
         nextChar()
       }
-      // charOffset += 0.2
     }
   }
 }

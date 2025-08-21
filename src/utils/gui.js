@@ -47,20 +47,31 @@ const initGUI = () => {
 
   const fillGlitchGroup = gui.addFolder("Glitch Options")
   fillGlitchGroup
-    .add(obj, "fillGlitchSeed")
-    .min(1)
+    .add(obj, "fillGlitchBgColor")
+    .name("Background with text color")
+    .onChange(refresh)
+  fillGlitchGroup
+    .add(obj, "fillGlitchNoiseChance")
+    .min(0)
     .max(100)
     .step(1)
-    .name("Seed")
+    .name("Noise chance")
+    .onChange(refresh)
+  fillGlitchGroup
+    .add(obj, "fillGlitchThreshold")
+    .min(0.01)
+    .max(1)
+    .step(0.01)
+    .name("Threshold")
     .onChange(refresh)
 
-  fillGlitchGroup
-    .add(obj, "fillGlitchSize")
-    .min(1)
-    .max(100)
-    .step(1)
-    .name("Size")
-    .onChange(refresh)
+  // fillGlitchGroup
+  //   .add(obj, "fillGlitchSize")
+  //   .min(1)
+  //   .max(100)
+  //   .step(1)
+  //   .name("Size")
+  //   .onChange(refresh)
 
   // const autoAnime = gui.addFolder("Auto Anime")
   // autoAnime
